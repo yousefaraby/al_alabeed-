@@ -28,7 +28,18 @@ const T = {
 const METHOD_ORDER: Method[] = ['face', 'finger', 'pin', 'card', 'key'];
 
 /** Shop catalogue: quick chips, sidebar filters (a bottom sheet on phones), search, shareable URL. */
-export default function ShopCatalog({ lang, initial }: { lang: Lang; initial: ShopQuery }) {
+/** Reads ?kind=&use=&type=&q=&focus= in the browser (the page itself is statically exported, so it can't read searchParams). */
+export default function ShopCatalog({ lang }: { lang: Lang }) {
+  const [initial, setInitial] = useState<ShopQuery>({});
+  useEffect(() => {
+    const sp = new URLSearchParams(location.search);
+    const next: ShopQuery = { kind: sp.get('kind') || undefined, use: sp.getAll('use'), type: sp.getAll('type'), q: sp.get('q') || undefined, focus: sp.get('focus') || undefined };
+    if (next.kind || next.use?.length || next.type?.length || next.q || next.focus) setInitial(next);
+  }, []);
+  return <ShopCatalogInner lang={lang} initial={initial} key={JSON.stringify(initial)} />;
+}
+
+function ShopCatalogInner({ lang, initial }: { lang: Lang; initial: ShopQuery }) {
   const t = T[lang];
   const { hooks } = useSite();
   const items = catalog(lang);
@@ -57,7 +68,10 @@ export default function ShopCatalog({ lang, initial }: { lang: Lang; initial: Sh
   const reset = useCallback(() => { setKind(''); setUses(new Set()); setTypes(new Set()); setMethods(new Set()); setQ(''); }, []);
 
   // keep the URL shareable
+  const firstSync = useRef(true);
   useEffect(() => {
+    // don't wipe the incoming query string on mount
+    if (firstSync.current) { firstSync.current = false; return; }
     const u = new URLSearchParams();
     if (kind) u.set('kind', kind); uses.forEach((x) => u.append('use', x)); types.forEach((x) => u.append('type', x)); if (q) u.set('q', q);
     try { history.replaceState(history.state, '', (u.toString() ? `?${u}` : location.pathname) + location.hash); } catch {}
