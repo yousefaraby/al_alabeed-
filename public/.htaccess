@@ -5,56 +5,41 @@ RewriteEngine On
 
 # ---------------------------------------------------------------
 # 1) 301 redirects for old URLs (previously in next.config.ts)
-#    THE_REQUEST check prevents loops with the internal .html rewrite below.
+#    THE_REQUEST checks only match what the visitor actually typed.
+#    Destinations end in "/" because the export uses trailingSlash: true.
 # ---------------------------------------------------------------
 
-# /index.html -> /   and   /en/index.html -> /en
+# /index.html -> /   and   /en/index.html -> /en/
 RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [R=301,L]
 
 RewriteCond %{THE_REQUEST} \s/en/index\.html[\s?] [NC]
-RewriteRule ^en/index\.html$ /en [R=301,L]
+RewriteRule ^en/index\.html$ /en/ [R=301,L]
 
-# /product.html?id=xxx -> /product/xxx  (and /en/...)
+# /product.html?id=xxx -> /product/xxx/  (and /en/...)
 RewriteCond %{QUERY_STRING} (?:^|&)id=([a-z0-9]+)(?:&|$)
-RewriteRule ^product\.html$ /product/%1? [R=301,L]
+RewriteRule ^product\.html$ /product/%1/? [R=301,L]
 
 RewriteCond %{QUERY_STRING} (?:^|&)id=([a-z0-9]+)(?:&|$)
-RewriteRule ^en/product\.html$ /en/product/%1? [R=301,L]
+RewriteRule ^en/product\.html$ /en/product/%1/? [R=301,L]
 
 # /about.html, /shop.html, /faq.html, /contact.html, /offline.html (and /en/...)
 RewriteCond %{THE_REQUEST} \s/(en/)?(about|shop|faq|contact|offline)\.html[\s?] [NC]
-RewriteRule ^(en/)?(about|shop|faq|contact|offline)\.html$ /$1$2 [R=301,L]
+RewriteRule ^(en/)?(about|shop|faq|contact|offline)\.html$ /$1$2/ [R=301,L]
 
 # ---------------------------------------------------------------
-# 2) Clean URLs for the Next.js static export
+# 2) Pages
+#    Next exports every page as <route>/index.html, so Apache's own
+#    DirectoryIndex handles them: /en -> /en/ (301) -> en/index.html.
+#    No rewrite rules are needed here.
 # ---------------------------------------------------------------
-
-# The export writes en.html AND an en/ folder (and shop.html AND shop/) side by side.
-# The folders hold no index.html, so Apache must never treat them as the page:
-# stop mod_dir from redirecting /en -> /en/ (which ends in 403 with -Indexes).
-DirectorySlash Off
-
-# Strip trailing slash (/en/ -> /en, /en/shop/ -> /en/shop) unless the folder has an index.html
-RewriteCond %{REQUEST_FILENAME}index.html !-f
-RewriteRule ^(.+)/$ /$1 [R=301,L]
-
-# /path -> /path.html when that file exists (checked even if a folder with the same name exists)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.+)$ $1.html [L]
-
-# /path -> /path/index.html when that file exists
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_FILENAME}/index.html -f
-RewriteRule ^(.+)$ $1/index.html [L]
 
 # ---------------------------------------------------------------
 # 3) 404 handling: the site's own 404 page, in the visitor's language
-#    (exported from app/(ar)/error-404 and app/en/error-404)
+#    (exported from app/(ar)/error-404 and app/en/error-404,
+#     which land in error-404/index.html and en/error-404/index.html)
 # ---------------------------------------------------------------
-ErrorDocument 404 /error-404.html
+ErrorDocument 404 /error-404/index.html
 <If "%{REQUEST_URI} =~ m#^/en(/|$)#">
-  ErrorDocument 404 /en/error-404.html
+  ErrorDocument 404 /en/error-404/index.html
 </If>
-
