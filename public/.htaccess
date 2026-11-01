@@ -30,13 +30,17 @@ RewriteRule ^(en/)?(about|shop|faq|contact|offline)\.html$ /$1$2 [R=301,L]
 # 2) Clean URLs for the Next.js static export
 # ---------------------------------------------------------------
 
-# Strip trailing slash (except real directories)
-RewriteCond %{REQUEST_FILENAME} !-d
+# The export writes en.html AND an en/ folder (and shop.html AND shop/) side by side.
+# The folders hold no index.html, so Apache must never treat them as the page:
+# stop mod_dir from redirecting /en -> /en/ (which ends in 403 with -Indexes).
+DirectorySlash Off
+
+# Strip trailing slash (/en/ -> /en, /en/shop/ -> /en/shop) unless the folder has an index.html
+RewriteCond %{REQUEST_FILENAME}index.html !-f
 RewriteRule ^(.+)/$ /$1 [R=301,L]
 
-# /path -> /path.html when that file exists
+# /path -> /path.html when that file exists (checked even if a folder with the same name exists)
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+)$ $1.html [L]
 
