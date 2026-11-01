@@ -11,7 +11,7 @@ import { href, type Lang } from './i18n';
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`) ||
-  'http://localhost:3000'
+  (process.env.NODE_ENV === 'production' ? 'https://alabed-digitallock.com' : 'http://localhost:3000')
 ).replace(/\/$/, '');
 
 export const abs = (path: string) => SITE_URL + path;
@@ -164,6 +164,11 @@ export function rootMetadata(lang: Lang): Metadata {
     formatDetection: { telephone: false },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
     verification: VERIFICATION,
+    // the logo Google shows beside the site in search results (square, on navy so it stays visible on white)
+    icons: {
+      icon: [{ url: '/favicon.ico', sizes: '48x48' }, { url: '/icon-192.png', sizes: '192x192', type: 'image/png' }, { url: '/icon-512.png', sizes: '512x512', type: 'image/png' }],
+      apple: '/apple-touch-icon.png',
+    },
   };
 }
 
@@ -185,7 +190,8 @@ export function organizationLd(lang: Lang) {
         name: BRAND[lang],
         alternateName: [BRAND[OTHER[lang]], 'ALABED Digital Lock'],
         url: abs(href(lang)),
-        logo: abs('/assets/logo/alabed-logo-white.png'),
+        logo: { '@type': 'ImageObject', url: abs('/assets/logo/alabed-logo-square.png'), width: 600, height: 600, caption: BRAND[lang] },
+        image: [abs('/assets/logo/alabed-logo-square.png'), abs('/assets/hero-lock.jpg')],
         email: 'al.abedlook@gmail.com',
         telephone: '+201020450649',
         areaServed: { '@type': 'Country', name: 'Egypt' },
@@ -202,6 +208,8 @@ export function organizationLd(lang: Lang) {
         '@id': abs(`${href(lang)}#website`),
         url: abs(href(lang)),
         name: BRAND[lang],
+        // the site name Google shows above the result instead of the bare domain
+        alternateName: [BRAND[OTHER[lang]], 'العابد', 'ALABED', 'alabed-digitallock.com'],
         inLanguage: lang,
         publisher: { '@id': abs('/#organization') },
         potentialAction: {

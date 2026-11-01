@@ -52,7 +52,7 @@ The quote list is kept in `localStorage` (`alabed-quote-list`), and quote reques
 Set the public domain before deploying (see `.env.example`):
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://www.your-domain.com
+NEXT_PUBLIC_SITE_URL=https://alabed-digitallock.com
 ```
 
 Everything SEO-related lives in `lib/seo.ts`:
@@ -67,7 +67,7 @@ Everything SEO-related lives in `lib/seo.ts`:
 After deploying:
 
 1. Add the site in [Google Search Console](https://search.google.com/search-console) and [Bing Webmaster Tools](https://www.bing.com/webmasters). Use the "HTML tag" method and put the codes in `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION`, then rebuild.
-2. Submit `https://<your-domain>/sitemap.xml` in both. Google finds the pages and every product photo from it; there is no separate image upload.
+2. Submit `https://alabed-digitallock.com/sitemap.xml` in both. Google finds the pages and every product photo from it; there is no separate image upload.
 3. Use URL Inspection → "Request indexing" on the home page, the shop and the main products to speed up the first crawl.
 4. Create a Google Business Profile for العابد ديجيتال لوك with the same name, phone and website, so the brand shows on Maps and in local Arabic searches.
 5. Links from other sites (suppliers, hotel clients, social pages) are what lift the generic terms; the brand name العابد usually ranks first on its own once indexed.
