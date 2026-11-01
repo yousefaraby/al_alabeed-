@@ -1,5 +1,6 @@
 'use client';
 
+import { play, type PlayOptions, type Played } from '@/lib/motion';
 import { useEffect, useRef, type ReactNode } from 'react';
 import type { Lang } from '@/lib/i18n';
 
@@ -21,15 +22,15 @@ function runCardTap(hero: HTMLElement, SIDE: 1 | -1) {
   const copy = [...hero.querySelectorAll('.shop-hero__copy > *')];
 
   // entrance
-  const intro: Animation[] = [];
+  const intro: Played[] = [];
   if (!REDUCED) {
-    intro.push(photo.animate([{ opacity: 0, transform: `translateX(${-SIDE * 40}px) scale(1.04)` }, { opacity: 1, transform: 'none' }], { duration: 1300, easing: EXPO, fill: 'forwards' }));
-    copy.forEach((el, i) => intro.push(el.animate([{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'none' }], { duration: 900, delay: 150 + i * 110, easing: EXPO, fill: 'both' })));
+    intro.push(play(photo, [{ opacity: 0, transform: `translateX(${-SIDE * 40}px) scale(1.04)` }, { opacity: 1, transform: 'none' }], { duration: 1300, easing: EXPO, fill: 'forwards' }));
+    copy.forEach((el, i) => intro.push(play(el, [{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'none' }], { duration: 900, delay: 150 + i * 110, easing: EXPO, fill: 'both' })));
   } else { photo.style.opacity = '1'; spill.setAttribute('opacity', '.55'); edge.setAttribute('opacity', '.6'); return; }
 
-  let running: Animation[] = [];
-  const A = (el: Element, kf: Keyframe[], o: KeyframeAnimationOptions) => { const a = el.animate(kf, { fill: 'both', easing: EXPO, ...o }); running.push(a); return a; };
-  function play() {
+  let running: Played[] = [];
+  const A = (el: Element, kf: Keyframe[], o: PlayOptions) => { const a = play(el, kf, { fill: 'both', easing: EXPO, ...o }); running.push(a); return a; };
+  function cycle() {
     running.forEach((a) => a.cancel()); running = [];
     // 1. card slides in and settles over the reader
     A(card, [{ opacity: 0, transform: `translate(${SIDE * 190}px, 120px) rotate(${ROT * 22}deg)` }, { opacity: 1, transform: `translate(0, -6px) rotate(${-ROT * 4}deg)`, offset: .75 }, { opacity: 1, transform: `translate(0, 0) rotate(${-ROT * 3}deg)` }], { duration: 700 });
@@ -50,7 +51,7 @@ function runCardTap(hero: HTMLElement, SIDE: 1 | -1) {
     A(edge, [{ opacity: .6 }, { opacity: 0 }], { duration: 980, delay: 3640, easing: 'ease-in-out', fill: 'forwards' });
   }
   let timer: ReturnType<typeof setInterval> | null = null;
-  const start = () => { if (timer) return; play(); timer = setInterval(play, 14600); };
+  const start = () => { if (timer) return; cycle(); timer = setInterval(cycle, 14600); };
   const stop = () => { if (timer) clearInterval(timer); timer = null; };
   let io: IntersectionObserver | undefined;
   const boot = setTimeout(() => {

@@ -23,6 +23,11 @@ jobs:
         run: npm install
 
       - name: Build (static export)
+        # set these under Settings → Secrets and variables → Actions → Variables
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          NEXT_PUBLIC_BING_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_BING_SITE_VERIFICATION }}
         run: npm run build
 
       - name: Deploy to Hostinger reliably

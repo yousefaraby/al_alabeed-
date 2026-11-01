@@ -1,7 +1,10 @@
 'use client';
 
+import { SMOOTH, SPRING, play } from '@/lib/motion';
+import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { AccIcon, AccPanel } from '../AccItem';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { norm } from '@/lib/catalog';
 import { FAQ } from '@/lib/faq';
 import { href, type Lang } from '@/lib/i18n';
@@ -53,8 +56,8 @@ export default function FaqExplorer({ lang }: { lang: Lang }) {
     // entrance
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const el = document.querySelector('.fq-hero')!;
-    el.querySelectorAll('.fq-ln > span').forEach((s, i) => s.animate([{ transform: 'translateY(105%)' }, { transform: 'none' }], { duration: 900, delay: 80 + i * 120, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' }));
-    [el.querySelector('.fq-lead'), el.querySelector('.fq-search')].forEach((x, i) => x?.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 800, delay: 350 + i * 120, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' }));
+    el.querySelectorAll('.fq-ln > span').forEach((s, i) => play(s, [{ transform: 'translateY(105%)' }, { transform: 'none' }], { duration: 900, delay: 80 + i * 120, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' }));
+    [el.querySelector('.fq-lead'), el.querySelector('.fq-search')].forEach((x, i) => x && play(x, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 800, delay: 350 + i * 120, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' }));
   }, [groups]);
 
   const pick = (key: string) => {
@@ -93,9 +96,10 @@ export default function FaqExplorer({ lang }: { lang: Lang }) {
       <section className="section fq" aria-label={t.list}>
         <div className="container">
           <div className="fq-chips" role="group" aria-label={t.list}>
-            <button className="fq-chip" type="button" data-fq-cat="" aria-pressed={cat === ''} onClick={() => pick('')}>{t.all}<span>{items.length}</span></button>
+            <button className="fq-chip" type="button" data-fq-cat="" aria-pressed={cat === ''} onClick={() => pick('')}>{cat === '' && <Pill />}{t.all}<span>{items.length}</span></button>
             {groups.map((g) => (
               <button className="fq-chip" type="button" data-fq-cat={g.key} aria-pressed={cat === g.key} onClick={() => pick(g.key)} key={g.key}>
+                {cat === g.key && <Pill />}
                 <Icon id={g.icon} />
                 {g.title}
                 <span>{g.items.length}</span>
@@ -106,24 +110,23 @@ export default function FaqExplorer({ lang }: { lang: Lang }) {
             {groups.map((g) => {
               const its = items.filter((it) => it.group === g.key);
               return (
-                <section className="fq-group" data-fq-group={g.key} aria-labelledby={`fqg-${g.key}`} hidden={!its.some(hit)} key={g.key}>
+                <motion.section layout="position" className="fq-group" data-fq-group={g.key} aria-labelledby={`fqg-${g.key}`} hidden={!its.some(hit)} key={g.key}>
                   <h2 id={`fqg-${g.key}`}><span className="fq-group__ic"><Icon id={g.icon} /></span>{g.title}</h2>
                   <div className="acc">
-                    {its.map((it) => (
-                      <Fragment key={it.id}>
-                        <div className="acc__item" data-fq-item hidden={!hit(it)}>
+                    <AnimatePresence initial={false}>
+                    {its.filter(hit).map((it) => (
+                        <motion.div className="acc__item" data-fq-item key={it.id} layout="position"
+                          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8, transition: { duration: 0.22, ease: SMOOTH } }} transition={{ layout: SPRING.glide, default: { duration: 0.45, ease: SMOOTH } }}>
                           <button className="acc__btn" aria-expanded={open.has(it.id)} aria-controls={it.id} id={`${it.id}b`} onClick={() => toggle(it.id)}>
                             <span>{mark(it.q)}</span>
-                            <span className="acc__icon"><Icon id="plus" /></span>
+                            <AccIcon open={open.has(it.id)} />
                           </button>
-                          <div className={`acc__panel${open.has(it.id) ? ' is-open' : ''}`} id={it.id} role="region" aria-labelledby={`${it.id}b`}>
-                            <div><p>{mark(it.a)}</p></div>
-                          </div>
-                        </div>
-                      </Fragment>
+                          <AccPanel id={it.id} open={open.has(it.id)}><p>{mark(it.a)}</p></AccPanel>
+                        </motion.div>
                     ))}
+                    </AnimatePresence>
                   </div>
-                </section>
+                </motion.section>
               );
             })}
           </div>
@@ -143,4 +146,9 @@ export default function FaqExplorer({ lang }: { lang: Lang }) {
       </section>
     </>
   );
+}
+
+/** The navy highlight behind the selected category; it glides between chips */
+function Pill() {
+  return <motion.span layoutId="fq-chip-pill" className="sel-pill" style={{ borderRadius: 999 }} transition={SPRING.glide} />;
 }

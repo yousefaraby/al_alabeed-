@@ -57,10 +57,17 @@ NEXT_PUBLIC_SITE_URL=https://www.your-domain.com
 
 Everything SEO-related lives in `lib/seo.ts`:
 
-- **Keywords**: site-wide Arabic and English search terms (`SITE_KEYWORDS`), extra terms per page (`PAGE_KEYWORDS`) and per product (`productKeywords`, built from the model, category, unlock methods, finishes and uses).
+- **Keywords**: site-wide Arabic and English search terms (`SITE_KEYWORDS`, including the brand spellings العابد / العابد لوك / ALABED and everyday Egyptian terms such as كالون فندقي and اقفال ذكية), extra terms per page (`PAGE_KEYWORDS`) and per product (`productKeywords`, built from the model, category, unlock methods, finishes and uses, plus the same words without hamza or taa marbuta).
 - **Every page** has a title, description, keywords, a canonical URL, `hreflang` links between Arabic and English, and Open Graph / Twitter cards.
-- **Every product** gets its own description, keywords, all of its photos (main photo, extra angles and one per finish) as share images, and `Product` + `BreadcrumbList` structured data.
+- **Every product** gets its own description (also shown on the product page), keywords, all of its photos (main photo, extra angles and one per finish) as share images, and `Product` + `BreadcrumbList` structured data. Each photo is an `ImageObject` with an Arabic or English caption naming the product, finish, category and brand.
+- **Every photo** on the site has descriptive alt text (`photoAlt` in `lib/catalog.ts`), which is what Google Images reads.
 - **`/sitemap.xml`** lists every page and product in both languages with their alternates, and every product photo as an image-sitemap entry. **`/robots.txt`** points to it.
 - Structured data also covers the company (`Organization`, `WebSite` with site search), the shop (`ItemList`) and the FAQ (`FAQPage`).
 
-After deploying, submit `https://<your-domain>/sitemap.xml` in Google Search Console.
+After deploying:
+
+1. Add the site in [Google Search Console](https://search.google.com/search-console) and [Bing Webmaster Tools](https://www.bing.com/webmasters). Use the "HTML tag" method and put the codes in `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION`, then rebuild.
+2. Submit `https://<your-domain>/sitemap.xml` in both. Google finds the pages and every product photo from it; there is no separate image upload.
+3. Use URL Inspection → "Request indexing" on the home page, the shop and the main products to speed up the first crawl.
+4. Create a Google Business Profile for العابد ديجيتال لوك with the same name, phone and website, so the brand shows on Maps and in local Arabic searches.
+5. Links from other sites (suppliers, hotel clients, social pages) are what lift the generic terms; the brand name العابد usually ranks first on its own once indexed.

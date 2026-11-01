@@ -3,7 +3,7 @@
 import { useRef, type CSSProperties, type FormEvent, type ReactNode } from 'react';
 import { MAIL, waLink } from '@/lib/catalog';
 import type { Lang } from '@/lib/i18n';
-import { useSite } from '../site/SiteProvider';
+import { useSiteStatic } from '../site/SiteProvider';
 
 const T = {
   ar: { title: 'سؤال سريع', name: 'الاسم', phone: 'رقم الموبايل', topic: 'الموضوع', subject: 'سؤال سريع: ', ready: 'تم تجهيز رسالتك، اضغط إرسال لإتمامها' },
@@ -12,7 +12,7 @@ const T = {
 
 /** "Quick question" form: validates, then opens WhatsApp or email with the message written. */
 export default function AskForm({ lang, style, children }: { lang: Lang; style?: CSSProperties; children: ReactNode }) {
-  const { say } = useSite();
+  const { say } = useSiteStatic();
   const form = useRef<HTMLFormElement>(null);
   const t = T[lang];
 

@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Metadata } from 'next';
-import { COLOR_IMGS, M, SW, USE_LABEL, catalog, type Product } from './catalog';
+import { COLOR_IMGS, M, SW, USES, USE_LABEL, catalog, photoAlt, type Finish, type Product } from './catalog';
 import { href, type Lang } from './i18n';
 
 /**
@@ -34,12 +34,19 @@ export const SITE_KEYWORDS: Record<Lang, string[]> = {
     'أقفال فنادق', 'قفل فندقي', 'قفل فندقي RFID', 'قفل بطاقة', 'قفل بصمة', 'قفل بصمة للباب', 'قفل ذكي بالوجه', 'قفل باب ذكي',
     'خزنة فندقية', 'خزن غرف فنادق', 'خزنة إلكترونية', 'باور سيفر', 'مفتاح توفير الطاقة', 'سويتش كارت للفنادق',
     'وكيل Goodum في مصر', 'أقفال ذكية القاهرة', 'سعر قفل ذكي',
+    // the brand as people type it
+    'العابد', 'العابد لوك', 'العابد ديجيتال', 'شركة العابد', 'العابد للاقفال', 'العابد للأقفال الذكية', 'ALABED',
+    // everyday Egyptian wording and spellings without hamza
+    'اقفال ذكية', 'اقفال فنادق', 'اقفال الكترونية', 'قفل الكتروني', 'كالون فندقي', 'كوالين فنادق', 'كالون بصمة', 'كالون الكتروني',
+    'قفل باب بالبصمة', 'قفل باب بالكارت', 'كارت فندق', 'كروت فنادق', 'قفل كارت فندقي', 'خزنة فندق', 'خزنه فندقيه', 'خزنة ديجيتال',
+    'باور سيفر فندقي', 'سويتش كارت', 'مفتاح الكارت للغرف', 'اقفال ذكية مصر', 'اسعار الاقفال الذكية',
   ],
   en: [
     'Alabed Digital Lock', 'Alabed locks', 'smart locks Egypt', 'smart door lock', 'electronic door lock', 'hotel door locks',
     'RFID hotel lock', 'hotel key card lock', 'fingerprint door lock', 'face recognition door lock', 'keyless door lock',
     'hotel room safe', 'hotel safe Egypt', 'electronic safe', 'power saver switch', 'hotel energy saving switch', 'key card power switch',
     'Goodum distributor Egypt', 'smart lock Cairo', 'smart lock price Egypt',
+    'Alabed', 'Al Abed', 'Alabed Egypt', 'hotel lock Egypt', 'hotel card lock', 'hotel safe box', 'digital door lock Egypt',
   ],
 };
 
@@ -55,6 +62,9 @@ export const PAGE_KEYWORDS: Record<string, Record<Lang, string[]>> = {
   '/contact': { ar: ['تواصل معنا', 'عرض سعر أقفال', 'أقفال واتساب'], en: ['contact Alabed', 'lock quote', 'smart lock quote Egypt'] },
 };
 
+/** Arabic as it is often typed: no hamza on alef, ة as ه, ى as ي ("أقفال إلكترونية" -> "اقفال الكترونيه") */
+const plainArabic = (s: string) => s.replace(/[أإآ]/g, 'ا').replace(/ة(?=\s|$)/g, 'ه').replace(/ى(?=\s|$)/g, 'ي');
+
 /** Keywords for one product: its name, model, category, unlock methods, finishes and where it fits */
 export function productKeywords(p: Product, lang: Lang): string[] {
   const k = new Set<string>([p.title, p.cat, p.badge]);
@@ -67,8 +77,10 @@ export function productKeywords(p: Product, lang: Lang): string[] {
   }
   p.m.forEach((m) => k.add(lang === 'ar' ? `قفل ${M[m].ar}` : `${M[m].en.toLowerCase()} lock`));
   p.sw.forEach((f) => k.add(lang === 'ar' ? `${p.badge} ${SW[f][1].ar}` : `${SW[f][1].en.toLowerCase()} ${p.badge.toLowerCase()}`));
-  p.uses.forEach((u) => k.add(lang === 'ar' ? `${p.badge} ${USE_LABEL[u].ar}` : `${p.badge.toLowerCase()} for ${USE_LABEL[u].en.toLowerCase()}`));
+  p.uses.forEach((u) => k.add(lang === 'ar' ? `${p.badge} ${USES[u].ar}` : `${p.badge.toLowerCase()} for ${USE_LABEL[u].en.toLowerCase()}`));
+  if (lang === 'ar' && p.model) ['كالون', 'سعر كالون'].forEach((w) => k.add(`${w} ${p.model}`));
   k.add(BRAND[lang]);
+  if (lang === 'ar') { k.add('العابد'); [...k].forEach((w) => k.add(plainArabic(w))); }
   return [...k];
 }
 
@@ -78,16 +90,16 @@ const PUBLIC = join(process.cwd(), 'public');
 const exists = (path: string) => existsSync(join(PUBLIC, path));
 const EXTRA: Record<string, string[]> = { me2043: ['/assets/products/me-2043uzh-2.webp', '/assets/products/me-2043uzh-2.jpg'] };
 
-export interface ProductImage { url: string; alt: string }
+export interface ProductImage { url: string; alt: string; finish?: Finish }
 
 /** Every photo of a product: main photo (webp + jpg), extra angles and one per finish */
 export function productImages(p: Product, lang: Lang): ProductImage[] {
   const list: ProductImage[] = [];
-  const add = (url: string, alt: string) => { if (exists(url) && !list.some((i) => i.url === url)) list.push({ url, alt }); };
-  add(`/assets/products/${p.img}.jpg`, p.title);
-  add(`/assets/products/${p.img}.webp`, p.title);
-  (EXTRA[p.id] || []).forEach((u) => add(u, p.title));
-  (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f)).forEach((f) => add(`/assets/products/colors/${p.id}-${f}.webp`, `${p.title} - ${SW[f][1][lang]}`));
+  const add = (url: string, alt: string, finish?: Finish) => { if (exists(url) && !list.some((i) => i.url === url)) list.push({ url, alt, finish }); };
+  add(`/assets/products/${p.img}.jpg`, photoAlt(p, lang));
+  add(`/assets/products/${p.img}.webp`, photoAlt(p, lang));
+  (EXTRA[p.id] || []).forEach((u) => add(u, photoAlt(p, lang)));
+  (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f)).forEach((f) => add(`/assets/products/colors/${p.id}-${f}.webp`, photoAlt(p, lang, f), f));
   return list;
 }
 
@@ -151,8 +163,15 @@ export function rootMetadata(lang: Lang): Metadata {
     category: lang === 'ar' ? 'أقفال ذكية وأنظمة أمان' : 'Smart locks and security',
     formatDetection: { telephone: false },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
+    verification: VERIFICATION,
   };
 }
+
+/** Ownership tags for Google Search Console and Bing Webmaster Tools, from the hosting environment */
+const VERIFICATION: Metadata['verification'] = {
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+  ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { other: { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } } : {}),
+};
 
 /* ---------- Structured data (schema.org JSON-LD) ---------- */
 
@@ -200,6 +219,9 @@ export function productLd(p: Product, lang: Lang) {
   const all = productImages(p, lang);
   // one copy of each photo (prefer the JPG when both formats exist)
   const images = all.filter((i) => !i.url.endsWith('.webp') || !all.some((j) => j.url === i.url.replace(/\.webp$/, '.jpg')));
+  const otherTitle = catalog(OTHER[lang]).find((o) => o.id === p.id)?.title;
+  const alternateName = [otherTitle, p.model, p.model && `${BRAND[lang]} ${p.model}`].filter((n): n is string => !!n && n !== p.title);
+  const org = { '@id': abs('/#organization') };
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -207,8 +229,24 @@ export function productLd(p: Product, lang: Lang) {
         '@type': 'Product',
         '@id': `${url}#product`,
         name: p.title,
+        ...(alternateName.length ? { alternateName } : {}),
         url,
-        image: images.map((i) => abs(i.url)),
+        // every photo as an ImageObject, so image search gets its caption, finish and owner
+        image: images.map((i, n) => ({
+          '@type': 'ImageObject',
+          contentUrl: abs(i.url),
+          url: abs(i.url),
+          name: i.alt,
+          caption: i.alt,
+          description: i.finish ? `${p.title} - ${SW[i.finish][1][lang]}` : p.title,
+          inLanguage: lang,
+          representativeOfPage: n === 0,
+          creditText: BRAND[lang],
+          creator: org,
+          copyrightHolder: org,
+          copyrightNotice: `© ${BRAND[lang]}`,
+          acquireLicensePage: abs(href(lang, '/contact')),
+        })),
         description: productDescription(p, lang),
         sku: p.id.toUpperCase(),
         ...(p.model ? { mpn: p.model, model: p.model } : {}),
@@ -217,7 +255,7 @@ export function productLd(p: Product, lang: Lang) {
         ...(p.sw.length ? { color: p.sw.map((f) => SW[f][1][lang]).join(', ') } : {}),
         keywords: productKeywords(p, lang).join(', '),
         inLanguage: lang,
-        seller: { '@id': abs('/#organization') },
+        seller: org,
       },
       {
         '@type': 'BreadcrumbList',
@@ -250,15 +288,18 @@ export function faqLd(items: [string, string][]) {
   };
 }
 
-/** Search-result description for a product: what it is, how it opens, finishes and where it fits */
-export function productDescription(p: Product, lang: Lang): string {
+/**
+ * A product described in plain words: what it is, how it opens, finishes and where it fits.
+ * Used for the search-result snippet and, without the call to action, as visible text on the product page.
+ */
+export function productDescription(p: Product, lang: Lang, cta = true): string {
   const list = (xs: string[]) => xs.join(lang === 'ar' ? '، ' : ', ');
   const parts = lang === 'ar'
     ? [`${p.title} من العابد ديجيتال لوك: ${p.cat}.`, p.desc && `${p.desc}.`,
       p.m.length && `طرق الفتح: ${list(p.m.map((m) => M[m].ar))}.`, p.sw.length && `التشطيبات: ${list(p.sw.map((f) => SW[f][1].ar))}.`,
-      `مناسب لـ${list(p.uses.map((u) => USE_LABEL[u].ar))}. اطلب عرض سعر على واتساب.`]
+      `مناسب ${p.uses.map((u) => USES[u].ar).join(' و')}.`, cta && 'اطلب عرض سعر على واتساب.']
     : [`${p.title} by Alabed Digital Lock: ${p.cat}.`, p.desc && `${p.desc}.`,
       p.m.length && `Unlock methods: ${list(p.m.map((m) => M[m].en.toLowerCase()))}.`, p.sw.length && `Finishes: ${list(p.sw.map((f) => SW[f][1].en))}.`,
-      `Suitable for ${list(p.uses.map((u) => USE_LABEL[u].en.toLowerCase()))}. Request a quote on WhatsApp.`];
+      `Suitable for ${list(p.uses.map((u) => USE_LABEL[u].en.toLowerCase()))}.`, cta && 'Request a quote on WhatsApp.'];
   return parts.filter(Boolean).join(' ');
 }

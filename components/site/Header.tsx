@@ -1,9 +1,12 @@
 'use client';
 
+import { play } from '@/lib/motion';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { href } from '@/lib/i18n';
+import { useOpenMotion } from '@/lib/useOpenMotion';
 import Icon from '../Icon';
 import { useSite } from './SiteProvider';
 
@@ -21,9 +24,12 @@ export default function Header() {
   const n = list.reduce((a, i) => a + i.qty, 0);
 
   useEffect(() => {
-    if (bump) countRef.current?.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    if (bump) countRef.current && play(countRef.current, [{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.34,1.56,.64,1)' });
   }, [bump]);
   useEffect(() => setOpen(false), [path]);
+  // on phones/tablets the menu drops down below the header
+  const navRef = useRef<HTMLElement>(null);
+  useOpenMotion(navRef, open, { opened: { opacity: 1, transform: 'none' }, closed: { opacity: 0, transform: 'translateY(-8px)' }, duration: 0.25, when: () => matchMedia('(max-width: 960px)').matches });
 
   const bare = path.replace(/^\/en(?=\/|$)/, '') || '/';
   const active = bare === '/' ? '/' : bare.startsWith('/product') ? '/shop' : bare;
@@ -35,10 +41,13 @@ export default function Header() {
         <Link className="logo" href={href(lang)} aria-label={t.homeLabel}>
           <img src="/assets/logo/alabed-logo-white.webp" alt="ALABED Digital Lock" width="130" height="51" />
         </Link>
-        <nav className={`nav${open ? ' is-open' : ''}`} id="nav" aria-label={t.nav.label} onClick={(e) => { if ((e.target as Element).closest('a') && open) setOpen(false); }}>
+        <nav ref={navRef} className={`nav${open ? ' is-open' : ''}`} id="nav" aria-label={t.nav.label} onClick={(e) => { if ((e.target as Element).closest('a') && open) setOpen(false); }}>
           <ul className="nav__list">
             {links.map(([p, label]) => (
-              <li key={p}><Link className="nav__link" href={href(lang, p)} aria-current={active === p ? 'page' : undefined}>{label}</Link></li>
+              <li key={p}><Link className="nav__link" href={href(lang, p)} aria-current={active === p ? 'page' : undefined}>
+                {label}
+                {active === p && <motion.span layoutId="nav-underline" className="nav__underline" transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }} />}
+              </Link></li>
             ))}
           </ul>
         </nav>

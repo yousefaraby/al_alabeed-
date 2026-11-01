@@ -10,7 +10,7 @@ import ShopHero from '@/components/shop/ShopHero';
 export const metadata: Metadata = pageMetadata({
   lang: 'ar',
   path: '/shop',
-  title:'/متجر',
+  title: 'المتجر',
   description: 'تصفّح أقفال الفنادق RFID وأقفال البصمة والوجه والرمز السري والخزن الفندقية ومفاتيح توفير الطاقة (باور سيفر) من العابد ديجيتال لوك، واطلب عرض سعر على واتساب.',
 });
 
