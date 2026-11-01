@@ -100,9 +100,9 @@
 /* colour picker */
 .pdp__block.is-picker h2 { color: var(--white); font-size: 16px; }
 .pdp__block.is-picker h2 span { color: var(--accent); }
-.pdp__swatches button { display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 18px 0 10px; border: 1.5px solid var(--navy-600); border-radius: 999px; background: transparent; color: var(--white); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: border-color .2s, background-color .2s, transform .25s cubic-bezier(.34,1.56,.64,1); }
+.pdp__swatches button { display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 18px 0 10px; border: 1.5px solid var(--navy-600); border-radius: 999px; background: transparent; color: var(--white); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: border-color .25s cubic-bezier(.22,1,.36,1), background-color .25s cubic-bezier(.22,1,.36,1), transform .35s cubic-bezier(.34,1.56,.64,1); }
 .pdp__block.is-picker .pdp__swatches li { padding: 0; border: 0; min-height: 0; }
-.pdp__swatches button:hover { border-color: var(--navy-450); transform: translateY(-2px); }
+.pdp__swatches button:hover { border-color: rgba(255,255,255,.45); transform: translateY(-2px); }
 .pdp__swatches button[aria-checked="true"] { border-color: var(--accent); background: rgba(250,171,8,.12); }
 .pdp__swatches button[aria-checked="true"] i { box-shadow: 0 0 0 2px var(--navy), 0 0 0 4px var(--accent); }
 .pdp__swatches button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

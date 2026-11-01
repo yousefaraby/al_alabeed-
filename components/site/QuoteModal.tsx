@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { MAIL, byId, waLink } from '@/lib/catalog';
+import { motion } from 'motion/react';
+import { play } from '@/lib/motion';
+import { useOpenMotion } from '@/lib/useOpenMotion';
 import Icon from '../Icon';
 import { useSite } from './SiteProvider';
 
@@ -21,6 +24,9 @@ export default function QuoteModal() {
   const [enabled, setEnabled] = useState<Record<string, boolean>>({});
   const [review, setReview] = useState<Row[]>([]);
   const [done, setDone] = useState({ ref: '', wa: 'https://wa.me/201004610860', mail: `mailto:${MAIL}` });
+  const quoteRoot = useRef<HTMLDivElement>(null), okRoot = useRef<HTMLDivElement>(null);
+  const modal = { backdrop: '.backdrop', panel: '.modal', opened: { opacity: 1, transform: 'none', filter: 'blur(0px)' }, closed: { opacity: 0, transform: 'translateY(24px) scale(.96)', filter: 'blur(6px)' } };
+  const dir = useRef(1); // +1 next step, -1 previous: steps swipe in from that side
   const listRef = useRef(list);
   listRef.current = list;
 
@@ -43,6 +49,7 @@ export default function QuoteModal() {
   }, [q, lang]);
 
   const show = useCallback((i: number) => {
+    dir.current = i >= curRef.current ? 1 : -1;
     curRef.current = i;
     setCur(i);
     if (i === 3) setReview(data());
@@ -89,10 +96,27 @@ export default function QuoteModal() {
   const err = (msg: string) => <span className="error-msg"><Icon id="info" hidden={false} />{msg}</span>;
   const req = <>{' '}<span className="req" aria-hidden="true">*</span></>;
   const open = isOpen('quote'), okOpen = isOpen('success');
+  useOpenMotion(quoteRoot, open, modal);
+  useOpenMotion(okRoot, okOpen, modal);
+  // the active step swipes in from the side it is coming from
+  useEffect(() => {
+    const step = form.current?.querySelectorAll('[data-step]')[cur];
+    if (!step || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const from = 14 * dir.current * (lang === 'ar' ? -1 : 1);
+    const a = play(step, [{ opacity: 0, transform: `translateX(${from}px)` }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'cubic-bezier(.16,1,.3,1)' });
+    return () => a.cancel();
+  }, [cur, lang]);
+  // tick draws itself when the confirmation opens
+  useEffect(() => {
+    const path = okRoot.current?.querySelector('.success-mark path');
+    if (!okOpen || !path) return;
+    const a = play(path, [{ strokeDashoffset: 30 }, { strokeDashoffset: 0 }], { duration: 500, delay: 250, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' });
+    return () => a.cancel();
+  }, [okOpen]);
 
   return (
     <>
-      <div className={`overlay${open ? ' is-open' : ''}`} id="quote" aria-hidden={!open}>
+      <div className={`overlay${open ? ' is-open' : ''}`} id="quote" aria-hidden={!open} ref={quoteRoot}>
         <div className="backdrop" data-close />
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="quote-title">
           <div className="modal__head">
@@ -117,10 +141,10 @@ export default function QuoteModal() {
                 <legend>{q.where}</legend>
                 <div className="option-cards">
                   {q.types.map(([key, label, sub, icon]) => (
-                    <label className="option-card" key={key}>
+                    <motion.label className="option-card" key={key} whileTap={{ scale: 0.97 }} transition={{ type: 'spring', bounce: 0.4, duration: 0.3 }}>
                       <input type="radio" name="type" value={label} data-key={key} onChange={() => { setErrType(false); setTimeout(() => go(1), 260); }} />
                       <span className="option-card__body"><Icon id={icon} hidden={false} /><strong>{label}</strong><small>{sub}</small></span>
-                    </label>
+                    </motion.label>
                   ))}
                 </div>
                 <p className={`error-msg${errType ? ' is-on' : ''}`} data-err="type" style={{ marginTop: '12px' }}><Icon id="info" hidden={false} />{q.typeErr}</p>
@@ -221,7 +245,7 @@ export default function QuoteModal() {
         </div>
       </div>
 
-      <div className={`overlay${okOpen ? ' is-open' : ''}`} id="success" aria-hidden={!okOpen}>
+      <div className={`overlay${okOpen ? ' is-open' : ''}`} id="success" aria-hidden={!okOpen} ref={okRoot}>
         <div className="backdrop" data-close />
         <div className="modal modal--center" role="dialog" aria-modal="true" aria-labelledby="sc-title">
           <div className="modal__body">

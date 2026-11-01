@@ -1,14 +1,19 @@
 'use client';
 
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'motion/react';
+import { useRef } from 'react';
 import { byId, imgSrc, waLink } from '@/lib/catalog';
 import { href } from '@/lib/i18n';
+import { useOpenMotion } from '@/lib/useOpenMotion';
 import Icon from '../Icon';
 import { useSite } from './SiteProvider';
 
 export default function QuoteListDrawer() {
   const { lang, t, list, setQty, toggleItem, isOpen } = useSite();
   const open = isOpen('quote-list');
+  const root = useRef<HTMLDivElement>(null);
+  useOpenMotion(root, open, { backdrop: '.backdrop', panel: '.drawer__panel', opened: { transform: 'none' }, closed: { transform: lang === 'ar' ? 'translateX(-100%)' : 'translateX(100%)' } });
   const items = list.map((i) => ({ ...i, p: byId(lang, i.id)! }));
   const send = () => {
     const lines = items.map((i) => `• ${i.p.title} × ${i.qty}`).join('\n');
@@ -19,7 +24,7 @@ export default function QuoteListDrawer() {
   const dec = <button type="button" data-qty="-1" aria-label={t.ql.dec} onClick={(e) => setQty(e.currentTarget.closest<HTMLElement>('.qitem')!.dataset.id!, -1)}>−</button>;
 
   return (
-    <div className={`drawer${open ? ' is-open' : ''}`} id="quote-list" aria-hidden={!open}>
+    <div className={`drawer${open ? ' is-open' : ''}`} id="quote-list" aria-hidden={!open} ref={root}>
       <div className="backdrop" data-close />
       <div className="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="ql-title">
         <div className="drawer__head">
@@ -35,7 +40,7 @@ export default function QuoteListDrawer() {
                   <div>
                     <small>{p.cat}</small><strong>{p.title}</strong>
                     <div className="stepper" role="group" aria-label={t.ql.qty}>
-                      {lang === 'ar' ? inc : dec}<output aria-live="polite">{qty}</output>{lang === 'ar' ? dec : inc}
+                      {lang === 'ar' ? inc : dec}<output aria-live="polite"><AnimatePresence initial={false} mode="popLayout"><motion.span key={qty} style={{ display: 'inline-block' }} initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }} transition={{ duration: 0.2 }}>{qty}</motion.span></AnimatePresence></output>{lang === 'ar' ? dec : inc}
                     </div>
                   </div>
                   <button className="qitem__rm" type="button" data-rm aria-label={`${t.ql.remove} ${p.title}`} onClick={() => toggleItem(p.id)}><Icon id="trash" /></button>

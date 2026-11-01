@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { waLink } from '@/lib/catalog';
+import { play } from '@/lib/motion';
 import Icon from '../Icon';
 import { useSite } from './SiteProvider';
 
@@ -12,6 +13,8 @@ export default function ChatWidget() {
   const fab = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    const panel = root.current?.querySelector('.chat-panel');
+    if (chatOpen && panel) play(panel, [{ opacity: 0, transform: 'translateY(10px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
     if (chatOpen) root.current?.querySelector<HTMLElement>('.chat-option')?.focus();
     const away = (e: MouseEvent) => { if (!(e.target as Element).closest('[data-chat]')) setChatOpen(false); };
     document.addEventListener('click', away);

@@ -29,7 +29,7 @@ export default async function ProductPage({ params }: Props) {
   return (
     <>
       {p && <JsonLd data={productLd(p, 'ar')} />}
-      <ProductView lang="ar" id={id} key={id} />
+      <ProductView lang="ar" id={id} summary={p ? productDescription(p, 'ar', false) : undefined} key={id} />
       {/* ================= FAQ ================= */}
       <FaqTeaser lang="ar" />
       {/* ================= CTA band ================= */}

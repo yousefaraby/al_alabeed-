@@ -6,6 +6,7 @@ import ChatWidget from './ChatWidget';
 import CookieBanner from './CookieBanner';
 import Footer from './Footer';
 import Header from './Header';
+import MotionFx from './MotionFx';
 import QuoteListDrawer from './QuoteListDrawer';
 import QuoteModal from './QuoteModal';
 import Reveal from './Reveal';
@@ -27,6 +28,7 @@ export default function SiteChrome({ lang, children }: { lang: Lang; children: R
       <ChatWidget />
       <CookieBanner />
       <Reveal />
+      <MotionFx />
     </SiteProvider>
   );
 }

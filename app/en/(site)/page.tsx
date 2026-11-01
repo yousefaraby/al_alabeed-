@@ -52,7 +52,7 @@ export default function HomePage() {
           </div>
           <div className="cats">
             <Link className="cat" href="/en/shop?kind=lock" data-reveal style={{ '--d': "0" }}>
-              <div className="cat__media"><img src="/assets/products/gm8s-pro.webp" alt="Smart lock GM8S Pro" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/colors/gm6s-black.webp" alt="GM6S Pro automatic smart lock in black with face and fingerprint unlock | Alabed Digital Lock" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>Smart locks</h3>
                 <p>RFID hotel locks, fingerprint + card + PIN locks, and automatic locks with face recognition.</p>
@@ -61,7 +61,7 @@ export default function HomePage() {
             </Link>
             {" "}
             <Link className="cat" href="/en/shop?kind=safe" data-reveal style={{ '--d': "1" }}>
-              <div className="cat__media"><img src="/assets/products/me-2043uzh-2.webp" alt="Hotel room safe" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/me-2043uzh-2.webp" alt="ME-2043UZH electronic hotel room safe | Alabed Digital Lock" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>Safes</h3>
                 <p>Hotel room safes with an electronic keypad and an emergency key lock.</p>
@@ -70,7 +70,7 @@ export default function HomePage() {
             </Link>
             {" "}
             <Link className="cat" href="/en/shop?kind=power" data-reveal style={{ '--d': "2" }}>
-              <div className="cat__media"><img src="/assets/products/power-saver.webp" alt="Energy-saving switch" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/power-saver.webp" alt="Power saver energy-saving key card switch for hotel rooms | Alabed Digital Lock" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>Power saver</h3>
                 <p>A key-card switch for rooms: insert the card to turn on the power.</p>
@@ -134,28 +134,28 @@ export default function HomePage() {
           </div>
           <div className="sols">
             <Link className="sol" href="/en/shop?use=hotel#catalog" data-type="hotel" data-reveal style={{ '--d': "0" }}>
-              <img src="/assets/products/a21.webp" alt="" loading="lazy" />
+              <img src="/assets/products/colors/a21-black.webp" alt="A21 RFID hotel lock in black | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Hotels</h3>
               <p>A lock, safe and power saver for every room.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/en/shop?use=home#catalog" data-type="home" data-reveal style={{ '--d': "1" }}>
-              <img src="/assets/products/gm8s-pro.webp" alt="" loading="lazy" />
+              <img src="/assets/products/colors/gm6s-black.webp" alt="GM6S Pro smart lock for homes and villas | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Homes &amp; villas</h3>
               <p>Face, fingerprint and PIN instead of keys, plus a safe for valuables.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/en/shop?type=rfid#catalog" data-type="office" data-reveal style={{ '--d': "2" }}>
-              <img src="/assets/products/k51.webp" alt="" loading="lazy" />
+              <img src="/assets/products/k51.webp" alt="K51 card lock for offices | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Offices</h3>
               <p>Staff cards and locks that suit modern doors.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/en/shop?use=apartment#catalog" data-type="apartment" data-reveal style={{ '--d': "3" }}>
-              <img src="/assets/products/e68.webp" alt="" loading="lazy" />
+              <img src="/assets/products/colors/e68-black.webp" alt="E68 fingerprint lock in black for apartments | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Apartments &amp; compounds</h3>
               <p>Fingerprint, PIN and card for every unit.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
