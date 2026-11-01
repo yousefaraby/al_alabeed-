@@ -34,4 +34,6 @@ jobs:
           local-dir: ./out/
           server-dir: ./
           timeout: 600000
-
+          exclude: |
+            **/.htaccess
+            **/.ftpquota
