@@ -14,7 +14,8 @@ export const SITE_URL = (
   (process.env.NODE_ENV === 'production' ? 'https://alabed-digitallock.com' : 'http://localhost:3000')
 ).replace(/\/$/, '');
 
-export const abs = (path: string) => SITE_URL + path;
+/** Absolute URL. Page paths get a trailing slash to match the export (trailingSlash: true); files, #ids and queries are left as they are. */
+export const abs = (path: string) => SITE_URL + (/[#?]|\.[a-z0-9]+$|\/$/i.test(path) ? path : `${path}/`);
 
 export const BRAND: Record<Lang, string> = { ar: 'العابد ديجيتال لوك', en: 'Alabed Digital Lock' };
 /** Home page title and the default description used where a page has none */
