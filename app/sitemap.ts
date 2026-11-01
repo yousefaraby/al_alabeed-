@@ -3,6 +3,9 @@ import { catalog } from '@/lib/catalog';
 import { href, type Lang } from '@/lib/i18n';
 import { abs, productImages } from '@/lib/seo';
 
+// generated once at build time (the site is a static export)
+export const dynamic = 'force-static';
+
 const LANGS: Lang[] = ['ar', 'en'];
 const PAGES: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }[] = [
   { path: '/', priority: 1, changeFrequency: 'weekly' },

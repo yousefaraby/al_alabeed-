@@ -6,7 +6,6 @@ import CtaBand from '@/components/sections/CtaBand';
 import FaqTeaser from '@/components/sections/FaqTeaser';
 import ShopCatalog from '@/components/shop/ShopCatalog';
 import ShopHero from '@/components/shop/ShopHero';
-import { shopQuery, type SearchParams } from '@/lib/search-params';
 
 export const metadata: Metadata = pageMetadata({
   lang: 'ar',
@@ -15,8 +14,7 @@ export const metadata: Metadata = pageMetadata({
   description: 'تصفّح أقفال الفنادق RFID وأقفال البصمة والوجه والرمز السري والخزن الفندقية ومفاتيح توفير الطاقة (باور سيفر) من العابد ديجيتال لوك، واطلب عرض سعر على واتساب.',
 });
 
-export default async function ShopPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const initial = shopQuery(await searchParams);
+export default function ShopPage() {
   return (
     <>
       <JsonLd data={catalogLd('ar')} />
@@ -92,7 +90,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
         </div>
       </ShopHero>
       {/* ================= Catalog ================= */}
-      <ShopCatalog lang="ar" initial={initial} key={JSON.stringify(initial)} />
+      <ShopCatalog lang="ar" />
       {/* ================= FAQ ================= */}
       <FaqTeaser lang="ar" />
       {/* ================= CTA band ================= */}

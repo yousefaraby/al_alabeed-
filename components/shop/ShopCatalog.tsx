@@ -1,13 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { KIND_ICON, KIND_LABEL, M, TYPES, USES, USE_ICONS, USE_LABEL, catalog, norm, type Kind, type Method, type TypeKey, type Use } from '@/lib/catalog';
 import type { Lang } from '@/lib/i18n';
 import Icon from '../Icon';
 import ProductCard from '../ProductCard';
 import { useSite } from '../site/SiteProvider';
 
-export interface ShopQuery { kind?: string; use?: string[]; type?: string[]; q?: string; focus?: string }
 
 const T = {
   ar: {
@@ -27,16 +27,26 @@ const T = {
 };
 const METHOD_ORDER: Method[] = ['face', 'finger', 'pin', 'card', 'key'];
 
+/** Reports the URL query (?kind=&use=&type=&q=&focus=) on load and on client-side navigation.
+    Kept in its own Suspense boundary so the product grid is still pre-rendered in the static export. */
+function QueryWatcher({ onChange }: { onChange: (query: string) => void }) {
+  const query = useSearchParams().toString();
+  useEffect(() => onChange(query), [query, onChange]);
+  return null;
+}
+
 /** Shop catalogue: quick chips, sidebar filters (a bottom sheet on phones), search, shareable URL. */
-export default function ShopCatalog({ lang, initial }: { lang: Lang; initial: ShopQuery }) {
+export default function ShopCatalog({ lang }: { lang: Lang }) {
   const t = T[lang];
   const { hooks } = useSite();
   const items = catalog(lang);
-  const [kind, setKind] = useState(initial.kind || '');
-  const [uses, setUses] = useState(() => new Set(initial.use ?? []));
-  const [types, setTypes] = useState(() => new Set(initial.type ?? []));
+  const [kind, setKind] = useState('');
+  const [uses, setUses] = useState(() => new Set<string>());
+  const [types, setTypes] = useState(() => new Set<string>());
   const [methods, setMethods] = useState(() => new Set<string>());
-  const [q, setQ] = useState(initial.q || '');
+  const [q, setQ] = useState('');
+  const [ready, setReady] = useState(false); // the URL query has been read
+  const written = useRef<string | null>(null); // last query this component wrote to the URL
   const [sheet, setSheet] = useState(false);
   const grid = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLElement>(null);
@@ -56,12 +66,14 @@ export default function ShopCatalog({ lang, initial }: { lang: Lang; initial: Sh
 
   const reset = useCallback(() => { setKind(''); setUses(new Set()); setTypes(new Set()); setMethods(new Set()); setQ(''); }, []);
 
-  // keep the URL shareable
+  // keep the URL shareable (only once the incoming query has been applied, so it isn't wiped on load)
   useEffect(() => {
+    if (!ready) return;
     const u = new URLSearchParams();
     if (kind) u.set('kind', kind); uses.forEach((x) => u.append('use', x)); types.forEach((x) => u.append('type', x)); if (q) u.set('q', q);
+    written.current = u.toString();
     try { history.replaceState(history.state, '', (u.toString() ? `?${u}` : location.pathname) + location.hash); } catch {}
-  }, [kind, uses, types, q]);
+  }, [ready, kind, uses, types, q]);
 
   // used by search: make sure the product is visible, then let search scroll to it
   const visibleRef = useRef(visible);
@@ -71,22 +83,22 @@ export default function ShopCatalog({ lang, initial }: { lang: Lang; initial: Sh
     return () => { hooks.showProduct = undefined; };
   }, [hooks, items, reset]);
 
-  // arriving with ?focus=<id> or with filters in the URL
-  useEffect(() => {
-    if (initial.focus && items.some((p) => p.id === initial.focus)) {
+  // arriving (or navigating within the site) with ?focus=<id> or with filters in the URL
+  const applyQuery = useCallback((query: string) => {
+    if (query === written.current) return; // our own replaceState echoing back
+    const sp = new URLSearchParams(query), focus = sp.get('focus');
+    setReady(true);
+    if (focus && items.some((p) => p.id === focus)) {
       reset();
-      const id = setTimeout(() => {
-        const card = grid.current?.querySelector<HTMLElement>(`.pcard[data-id="${initial.focus}"]`); if (!card) return;
+      setTimeout(() => {
+        const card = grid.current?.querySelector<HTMLElement>(`.pcard[data-id="${focus}"]`); if (!card) return;
         card.classList.add('is-in'); card.scrollIntoView({ behavior: 'smooth', block: 'center' }); card.classList.add('is-flash');
       }, 400);
-      return () => clearTimeout(id);
+      return;
     }
-    if (initial.kind || initial.use?.length || initial.type?.length || initial.q) {
-      const id = setTimeout(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }), 300);
-      return () => clearTimeout(id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setKind(sp.get('kind') || ''); setUses(new Set(sp.getAll('use'))); setTypes(new Set(sp.getAll('type'))); setMethods(new Set()); setQ(sp.get('q') || '');
+    if (['kind', 'use', 'type', 'q'].some((k) => sp.has(k))) setTimeout(() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' }), 300);
+  }, [items, reset]);
 
   // the hero button ("browse smart locks") picks the locks chip
   useEffect(() => {
@@ -117,6 +129,7 @@ export default function ShopCatalog({ lang, initial }: { lang: Lang; initial: Sh
 
   return (
     <>
+      <Suspense fallback={null}><QueryWatcher onChange={applyQuery} /></Suspense>
       <section className="shop" id="catalog" aria-label={t.label}>
         <div className="container">
           <div className="chipbar" role="group" aria-label={t.quick} data-chipbar>
