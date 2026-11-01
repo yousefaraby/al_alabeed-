@@ -15,7 +15,7 @@ const PAGES: { path: string; priority: number; changeFrequency: 'weekly' | 'mont
   { path: '/contact', priority: 0.7, changeFrequency: 'monthly' },
 ];
 const IMAGES: Record<string, string[]> = {
-  '/': ['/assets/hero-lock.jpg', '/assets/products/gm8s-pro.jpg', '/assets/products/me-2043uzh-2.jpg', '/assets/products/power-saver.jpg'],
+  '/': ['/assets/hero-lock.jpg', '/assets/products/gm6s-pro.jpg', '/assets/products/me-2043uzh-2.jpg', '/assets/products/power-saver.jpg'],
   '/shop': ['/assets/shop-hero.jpg'],
   '/about': ['/assets/about-dial.jpg'],
 };

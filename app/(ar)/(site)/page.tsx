@@ -50,7 +50,7 @@ export default function HomePage() {
           </div>
           <div className="cats">
             <Link className="cat" href="/shop?kind=lock" data-reveal style={{ '--d': "0" }}>
-              <div className="cat__media"><img src="/assets/products/gm8s-pro.webp" alt="قفل ذكي GM8S Pro" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/colors/gm6s-black.webp" alt="قفل ذكي أوتوماتيكي GM6S Pro أسود بالوجه والبصمة | العابد ديجيتال لوك" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>الأقفال الذكية</h3>
                 <p>أقفال فندقية ببطاقات RFID، وأقفال ببصمة وبطاقة ورمز، وأقفال أوتوماتيكية بالتعرف على الوجه.</p>
@@ -59,7 +59,7 @@ export default function HomePage() {
             </Link>
             {" "}
             <Link className="cat" href="/shop?kind=safe" data-reveal style={{ '--d': "1" }}>
-              <div className="cat__media"><img src="/assets/products/me-2043uzh-2.webp" alt="خزنة غرف فندقية" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/me-2043uzh-2.webp" alt="خزنة غرف فندقية ME-2043UZH إلكترونية | العابد ديجيتال لوك" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>الخزن</h3>
                 <p>خزن غرف فندقية بلوحة أرقام إلكترونية وقفل طوارئ بمفتاح.</p>
@@ -68,7 +68,7 @@ export default function HomePage() {
             </Link>
             {" "}
             <Link className="cat" href="/shop?kind=power" data-reveal style={{ '--d': "2" }}>
-              <div className="cat__media"><img src="/assets/products/power-saver.webp" alt="مفتاح توفير الطاقة" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/power-saver.webp" alt="مفتاح توفير الطاقة باور سيفر لغرف الفنادق | العابد ديجيتال لوك" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>باور سيفر</h3>
                 <p>مفتاح بطاقة للغرف: أدخل البطاقة لتشغيل الكهرباء.</p>
@@ -132,28 +132,28 @@ export default function HomePage() {
           </div>
           <div className="sols">
             <Link className="sol" href="/shop?use=hotel#catalog" data-type="hotel" data-reveal style={{ '--d': "0" }}>
-              <img src="/assets/products/a21.webp" alt="" loading="lazy" />
+              <img src="/assets/products/colors/a21-black.webp" alt="قفل فندقي A21 أسود ببطاقة RFID للفنادق | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>الفنادق</h3>
               <p>قفل وخزنة وباور سيفر لكل غرفة.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/shop?use=home#catalog" data-type="home" data-reveal style={{ '--d': "1" }}>
-              <img src="/assets/products/gm8s-pro.webp" alt="" loading="lazy" />
+              <img src="/assets/products/colors/gm6s-black.webp" alt="قفل ذكي GM6S Pro للمنازل والفلل | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>المنازل والفلل</h3>
               <p>وجه وبصمة ورمز بدل المفتاح، وخزنة للمقتنيات.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/shop?type=rfid#catalog" data-type="office" data-reveal style={{ '--d': "2" }}>
-              <img src="/assets/products/k51.webp" alt="" loading="lazy" />
+              <img src="/assets/products/k51.webp" alt="قفل بطاقة K51 للمكاتب | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>المكاتب</h3>
               <p>بطاقات للموظفين وأقفال تناسب الأبواب الحديثة.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/shop?use=apartment#catalog" data-type="apartment" data-reveal style={{ '--d': "3" }}>
-              <img src="/assets/products/e68.webp" alt="" loading="lazy" />
+              <img src="/assets/products/colors/e68-black.webp" alt="قفل بصمة E68 أسود للشقق والكمباوندات | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>الشقق والكمباوندات</h3>
               <p>بصمة ورمز وبطاقة لكل وحدة.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>

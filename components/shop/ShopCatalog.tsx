@@ -16,14 +16,14 @@ const T = {
   ar: {
     label: 'المنتجات', quick: 'فلاتر سريعة', all: 'الكل', filters: 'تصفية النتائج', close: 'إغلاق', clearAll: 'مسح الكل',
     types: 'النوع (حسب الكتالوج)', uses: 'حسب المكان', methods: 'طرق الفتح (للأقفال)', clear: 'مسح', show: 'عرض النتائج',
-    search: 'ابحث في المنتجات', placeholder: 'ابحث: A21، بصمة، GM8S…', filter: 'تصفية',
+    search: 'ابحث في المنتجات', placeholder: 'ابحث: A21، بصمة، GM6S…', filter: 'تصفية',
     count: (n: number, all: number) => <>عرض <strong><Count n={n} /></strong> من {all} منتجًا</>,
     empty: 'لا توجد منتجات بهذه الفلاتر', emptyText: 'جرّب إزالة بعض الفلاتر أو البحث بكلمة أخرى.', emptyBtn: 'مسح الفلاتر',
   },
   en: {
     label: 'Products', quick: 'Quick filters', all: 'All', filters: 'Filter results', close: 'Close', clearAll: 'Clear all',
     types: 'Type (by catalog)', uses: 'By location', methods: 'Unlock methods (locks)', clear: 'Clear', show: 'Show results',
-    search: 'Search products', placeholder: 'Search: A21, fingerprint, GM8S…', filter: 'Filter',
+    search: 'Search products', placeholder: 'Search: A21, fingerprint, GM6S…', filter: 'Filter',
     count: (n: number, all: number) => <>Showing <strong><Count n={n} /></strong> of {all} products</>,
     empty: 'No products match these filters', emptyText: 'Try removing some filters or searching for something else.', emptyBtn: 'Clear filters',
   },

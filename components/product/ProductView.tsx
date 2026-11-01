@@ -8,7 +8,7 @@ import { flushSync } from 'react-dom';
 import { follow, fromBall, loaded, springBack, swipeAway } from '@/lib/colorMorph';
 import { EXPO as EXPO_CURVE, SPRING, play } from '@/lib/motion';
 import { takeCardNavigation } from '@/lib/morph';
-import { COLOR_IMGS, M, SW, USE_ICONS, USE_LABEL, byId, catalog, colorImg, imgSrc, waLink, type Finish } from '@/lib/catalog';
+import { COLOR_IMGS, M, SW, USE_ICONS, USE_LABEL, byId, catalog, colorImg, imgSrc, photoAlt, waLink, type Finish } from '@/lib/catalog';
 import { href, type Lang } from '@/lib/i18n';
 import AddToQuote from '../AddToQuote';
 import Icon from '../Icon';
@@ -35,11 +35,12 @@ const SMOOTH_CSS = 'cubic-bezier(.22,1,.36,1)';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Product details: gallery with a live finish picker, specs, add-to-quote and related products */
-export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
+/** `summary`: the product described in plain words (built on the server, shown under the title) */
+export default function ProductView({ lang, id, summary }: { lang: Lang; id?: string; summary?: string }) {
   const t = T[lang];
   const p = id ? byId(lang, id) : undefined;
   const pickable = p ? (COLOR_IMGS[p.id] || []).filter((k) => p.sw.includes(k)) : [];
-  const start: Finish | null = pickable.length ? (pickable.includes('silver') ? 'silver' : pickable[0]) : null;
+  const start: Finish | null = pickable.length ? (pickable.includes('black') ? 'black' : pickable[0]) : null;
   const [chosen, setChosen] = useState<Finish | null>(start);
   const [src, setSrc] = useState(p ? (start ? colorImg(p.id, start) : imgSrc(p)) : '');
   const img = useRef<HTMLImageElement>(null);
@@ -147,7 +148,7 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
               <motion.div ref={stage} className={`pdp__stage${chosen ? ' is-color' : ''}${pickable.length > 1 ? ' is-swipe' : ''}`} onPan={onPan} onPanEnd={onPanEnd}>
                 <span className="pdp__badge" data-pdp-badge>{p.badge}</span>{' '}
                 <AnimateView name={photoName(p.id)} transition={{ duration: 0.5, ease: EXPO_CURVE }}>
-                  <img data-pdp-img src={src} alt={chosen ? `${p.title} - ${label}` : p.title} decoding="async" ref={img} draggable={false} />
+                  <img data-pdp-img src={src} alt={photoAlt(p, lang, chosen)} decoding="async" fetchPriority="high" ref={img} draggable={false} />
                 </AnimateView>
                 {pickable.length > 1 && (
                   <span className="swipe-dots" aria-hidden="true">{pickable.map((k) => <i key={k} className={k === chosen ? 'on' : undefined} />)}</span>
@@ -157,7 +158,7 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
             <div className="pdp__info" ref={info}>
               <span className="pdp__cat" data-pdp-cat>{p.cat}</span>
               <h1 id="pdp-title" data-pdp-title>{p.title}</h1>
-              <p className="pdp__desc" data-pdp-desc hidden={!p.desc}>{p.desc}</p>
+              <p className="pdp__desc" data-pdp-desc hidden={!(summary || p.desc)}>{summary || p.desc}</p>
               <dl className="pdp__meta" data-pdp-meta>
                 {rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
               </dl>
@@ -176,7 +177,7 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
                           {chosen === k && <motion.span layoutId="pdp-swatch-pill" className="sel-pill" style={{ borderRadius: 999 }} transition={SPRING.glide}
                             animate={{ borderColor: pillColor(SW[k][0]), backgroundColor: pillColor(SW[k][0], 0.16) }} />}
                           {/* the ball shows the product in this finish */}
-                          <i className="ball" style={{ '--sw': SW[k][0] }}><img src={colorImg(p.id, k)} alt="" loading="lazy" decoding="async" draggable={false} /></i>{SW[k][1][lang]}
+                          <i className="ball" style={{ '--sw': SW[k][0] }}><img src={colorImg(p.id, k)} alt={photoAlt(p, lang, k)} aria-hidden="true" loading="lazy" decoding="async" draggable={false} /></i>{SW[k][1][lang]}
                         </motion.button>
                       </li>
                     ))}

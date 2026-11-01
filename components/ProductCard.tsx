@@ -1,11 +1,11 @@
 'use client';
 
-import { motion, type PanInfo } from 'motion/react';
+import { AnimatePresence, motion, type PanInfo } from 'motion/react';
 import { AnimateView } from 'motion/react-animate-view';
 import Link from 'next/link';
 import { memo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { COLOR_IMGS, M, SW, colorImg, imgSrc, type Finish, type Product } from '@/lib/catalog';
+import { COLOR_IMGS, M, SW, colorImg, imgSrc, photoAlt, type Finish, type Product } from '@/lib/catalog';
 import { follow, fromBall, loaded, springBack, swipeAway } from '@/lib/colorMorph';
 import { dict, href, type Lang } from '@/lib/i18n';
 import { EXPO, SPRING } from '@/lib/motion';
@@ -31,7 +31,9 @@ function ProductCard({ p, lang, variant, index = 0, className = '' }: Props) {
   // finishes that have their own photo can be picked on the card
   const pickable = (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f));
   const start = imgSrc(p);
-  const [finish, setFinish] = useState<Finish | null>(pickable.find((f) => start === colorImg(p.id, f)) ?? null);
+  const [finish, setFinish] = useState<Finish | null>(
+    pickable.find((f) => start === colorImg(p.id, f)) ?? (pickable.includes('black') ? 'black' : null)
+  );
   const [src, setSrc] = useState(start);
   const media = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
@@ -65,7 +67,7 @@ function ProductCard({ p, lang, variant, index = 0, className = '' }: Props) {
 
   const photo = (
     <AnimateView name={photoName(p.id)} transition={{ duration: 0.5, ease: EXPO }}>
-      <img ref={img} src={src} alt={finish ? `${p.title} - ${SW[finish][1][lang]}` : p.title} loading="lazy" decoding="async" draggable={false} />
+      <img ref={img} src={src} alt={photoAlt(p, lang, finish)} loading="lazy" decoding="async" draggable={false} />
     </AnimateView>
   );
   // open the product page in the finish picked on the card
@@ -105,17 +107,40 @@ function ProductCard({ p, lang, variant, index = 0, className = '' }: Props) {
           </div>
         )}
         {variant !== 'related' && p.sw.length > 0 && (
-          <div className="swatches" aria-label={t.finishesLabel}>
-            {p.sw.map((k) => pickable.includes(k) ? (
-              <motion.button type="button" className="sw sw--ball" style={{ '--sw': SW[k][0] }} title={SW[k][1][lang]} aria-pressed={finish === k} key={k}
-                animate={{ scale: finish === k ? 1.1 : 1 }} whileTap={{ scale: 0.82 }} transition={SPRING.pop} onClick={(e) => pick(k, e.currentTarget)}>
-                <img src={colorImg(p.id, k)} alt="" loading="lazy" decoding="async" draggable={false} />
-                <span className="sr-only">{SW[k][1][lang]}</span>
-              </motion.button>
-            ) : (
-              <span className="sw" style={{ '--sw': SW[k][0] }} title={SW[k][1][lang]} key={k}><span className="sr-only">{SW[k][1][lang]}</span></span>
-            ))}
-          </div>
+          <>
+            <div className="swatches" aria-label={t.finishesLabel}>
+              {p.sw.map((k) => pickable.includes(k) ? (
+                <motion.button type="button" className="sw sw--ball" style={{ '--sw': SW[k][0] }} aria-pressed={finish === k} key={k}
+                  animate={{ scale: finish === k ? 1.1 : 1 }} whileTap={{ scale: 0.82 }} transition={SPRING.pop} onClick={(e) => pick(k, e.currentTarget)}>
+                  <img src={colorImg(p.id, k)} alt={photoAlt(p, lang, k)} aria-hidden="true" loading="lazy" decoding="async" draggable={false} />
+                  <span className="sw-tip">{SW[k][1][lang]}</span>
+                  <span className="sr-only">{SW[k][1][lang]}</span>
+                </motion.button>
+              ) : (
+                <span className="sw" style={{ '--sw': SW[k][0] }} key={k}>
+                  <span className="sw-tip">{SW[k][1][lang]}</span>
+                  <span className="sr-only">{SW[k][1][lang]}</span>
+                </span>
+              ))}
+            </div>
+            {/* Finish chip: appears below swatches when a colour is chosen */}
+            <AnimatePresence mode="wait">
+              {finish && (
+                <motion.span
+                  key={finish}
+                  className="finish-chip"
+                  style={{ '--sw': SW[finish][0] } as React.CSSProperties}
+                  initial={{ opacity: 0, scale: 0.8, y: -4 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.85, y: -4 }}
+                  transition={{ type: 'spring', stiffness: 420, damping: 26 }}
+                >
+                  <i className="finish-chip__dot" aria-hidden="true" />
+                  {SW[finish][1][lang]}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </>
         )}
         <div className="pcard__foot"><AddToQuote id={p.id} /></div>
       </div>

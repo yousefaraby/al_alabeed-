@@ -101,22 +101,22 @@ const RFID = { kind: 'lock', type: 'rfid', m: ['card', 'key'], uses: ['hotel', '
 const CARD_PROGRAMMER: Text = { ar: 'جهاز برمجة كروت', en: 'Card programmer' };
 
 const RAW: RawProduct[] = [
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v81', img: 'v81', model: 'V81', sw: ['silver', 'black', 'gold'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v31', img: 'v31', model: 'V31', sw: ['silver', 'black', 'gold'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'a21', img: 'a21', model: 'A21', sw: ['silver', 'black', 'gold'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k71', img: 'k71', model: 'K71', sw: ['silver', 'black'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v81', img: 'v81', model: 'V81', sw: ['black', 'silver', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v31', img: 'v31', model: 'V31', sw: ['black', 'silver', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'a21', img: 'a21', model: 'A21', sw: ['black', 'silver', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k71', img: 'k71', model: 'K71', sw: ['black', 'silver'] },
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k51', img: 'k51', model: 'K51', sw: ['black'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k81', img: 'k81', model: 'K81', sw: ['silver', 'black', 'gold'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'e61', img: 'e61', model: 'E61', sw: ['silver', 'black', 'gold'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'e51', img: 'e51', model: 'E51', sw: ['silver', 'black', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k81', img: 'k81', model: 'K81', sw: ['black', 'silver', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'e61', img: 'e61', model: 'E61', sw: ['black', 'silver', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'e51', img: 'e51', model: 'E51', sw: ['black', 'silver', 'gold'] },
   { id: 'dc', img: 'data-collector', kind: 'acc', type: 'acc', badge: CARD_PROGRAMMER, name: { ar: 'جهاز جمع البيانات (Data Collector)', en: 'Data Collector' }, desc: { ar: 'واجهة سهلة مبنية على نظام تشغيل للموبايل', en: 'Easy interface built on a mobile operating system' }, m: [], sw: [], uses: ['hotel'] },
   { id: 'enc', img: 'rfid-encoder', kind: 'acc', type: 'acc', badge: CARD_PROGRAMMER, name: { ar: 'جهاز برمجة الكروت RFID', en: 'RFID Card Encoder' }, desc: { ar: 'يبرمج كروت الأقفال للنزلاء والموظفين بتوصيله بالكمبيوتر', en: 'Programs lock cards for guests and staff via a PC connection' }, m: [], sw: [], uses: ['hotel'] },
   { id: 'gm6s', img: 'gm6s-pro', kind: 'lock', type: 'auto', model: 'GM6S Pro', m: ['face', 'finger', 'pin', 'card', 'key'], sw: ['black', 'copper'], uses: ['home', 'apartment'] },
-  { id: 'e68', img: 'e68', kind: 'lock', type: 'fppin', model: 'E68', m: ['finger', 'pin', 'card', 'key'], sw: ['silver', 'black', 'gold'], uses: ['home', 'apartment'] },
-  { id: 'h58', img: 'h58', kind: 'lock', type: 'fppin', model: 'H58', m: ['finger', 'pin', 'card', 'key'], sw: ['silver', 'black', 'gold'], uses: ['home', 'apartment'] },
+  { id: 'e68', img: 'e68', kind: 'lock', type: 'fppin', model: 'E68', m: ['finger', 'pin', 'card', 'key'], sw: ['black', 'silver', 'gold'], uses: ['home', 'apartment'] },
+  { id: 'h58', img: 'h58', kind: 'lock', type: 'fppin', model: 'H58', m: ['finger', 'pin', 'card', 'key'], sw: ['black', 'silver', 'gold'], uses: ['home', 'apartment'] },
   { id: 'me2043', img: 'me-2043uzh', kind: 'safe', type: 'safe', name: { ar: 'خزنة فندقية ME-2043UZH', en: 'Hotel safe ME-2043UZH' }, desc: { ar: 'سلسلة ME الاقتصادية (مع وظيفة CEU)', en: 'Economy ME series (with CEU function)' }, m: [], sw: ['black'], uses: ['hotel', 'home'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'p21', img: 'p21', model: 'P21', sw: ['silver'] },
-  { id: 'gm8s', img: 'gm8s-pro', kind: 'lock', type: 'auto', model: 'GM8S Pro', m: ['face', 'finger', 'pin', 'card', 'key'], sw: ['black'], uses: ['home', 'apartment'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'p21', img: 'p21', model: 'P21', sw: ['black', 'silver'] },
+
   { id: 'ps', img: 'power-saver', kind: 'power', type: 'power', name: { ar: 'مفتاح توفير الطاقة (باور سيفر)', en: 'Energy-saving switch (power saver)' }, desc: { ar: 'أدخل البطاقة لتشغيل الكهرباء', en: 'Insert the card to turn on the power' }, m: ['card'], sw: ['white'], uses: ['hotel'] },
 ];
 
@@ -135,20 +135,31 @@ export const byId = (lang: Lang, id: string) => CATALOGS[lang].find((p) => p.id 
 
 /* Home page "featured models" */
 export const featured = (lang: Lang) =>
-  ['k81', 'a21', 'v81', 'e68', 'gm6s', 'gm8s', 'me2043', 'ps']
+  ['k81', 'a21', 'v81', 'e68', 'gm6s', 'me2043', 'ps']
     .map((id) => byId(lang, id)!)
     .map((p) => (p.id === 'ps' ? { ...p, badge: lang === 'ar' ? 'باور سيفر' : 'Power saver' } : p));
 
 /* Products with per-finish photos (assets/products/colors/<id>-<finish>.webp) */
 export const COLOR_IMGS: Record<string, Finish[]> = {
-  k71: ['silver', 'black'], k81: ['silver', 'black', 'gold'], v31: ['silver', 'black', 'gold'], v81: ['silver', 'black', 'gold'],
-  a21: ['silver', 'black', 'gold'], e51: ['silver', 'black', 'gold'], e61: ['silver', 'black', 'gold'], e68: ['silver', 'black', 'gold'],
-  gm6s: ['copper', 'black'], gm8s: ['black'], p21: ['silver'], h58: ['silver', 'black', 'gold'],
+  k71: ['black', 'silver'], k81: ['black', 'silver', 'gold'], v31: ['black', 'silver', 'gold'], v81: ['black', 'silver', 'gold'],
+  a21: ['black', 'silver', 'gold'], e51: ['black', 'silver', 'gold'], e61: ['black', 'silver', 'gold'], e68: ['black', 'silver', 'gold'],
+  gm6s: ['black', 'copper'], p21: ['black', 'silver'], h58: ['black', 'silver', 'gold'],
 };
-const SILVER_IMG = ['k71', 'k81', 'v31', 'v81', 'a21', 'e51', 'e61', 'e68', 'p21', 'h58'];
+export const BLACK_IMG = ['k71', 'k81', 'v31', 'v81', 'a21', 'e51', 'e61', 'e68', 'p21', 'h58', 'gm6s'];
 export const imgSrc = (p: Pick<Product, 'id' | 'img' | 'sw'>) =>
-  SILVER_IMG.includes(p.id) && p.sw.includes('silver') ? `/assets/products/colors/${p.id}-silver.webp` : `/assets/products/${p.img}.webp`;
+  p.sw.includes('black') && (BLACK_IMG.includes(p.id) || COLOR_IMGS[p.id]?.includes('black'))
+    ? `/assets/products/colors/${p.id}-black.webp`
+    : `/assets/products/${p.img}.webp`;
 export const colorImg = (id: string, finish: Finish) => `/assets/products/colors/${id}-${finish}.webp`;
+
+/**
+ * Alt text for a product photo, written for people and for Google Images:
+ * product, finish, category and brand ("قفل فندقي - K81 أسود - أقفال فندقية RFID | العابد ديجيتال لوك").
+ */
+export function photoAlt(p: Pick<Product, 'title' | 'cat'>, lang: Lang, finish?: Finish | null) {
+  const f = finish ? (lang === 'ar' ? ` ${SW[finish][1].ar}` : ` in ${SW[finish][1].en}`) : '';
+  return lang === 'ar' ? `${p.title}${f} - ${p.cat} | العابد ديجيتال لوك` : `${p.title}${f} – ${p.cat} | Alabed Digital Lock`;
+}
 
 /* Arabic-aware normalisation used by every search box */
 export const norm = (s: string) =>
