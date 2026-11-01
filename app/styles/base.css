@@ -63,6 +63,18 @@ ul { margin: 0; padding: 0; list-style: none; }
 .lang { font-size: 20px; font-weight: 500; color: var(--white); padding: 4px 6px; }
 .header__cta { min-height: 42px; font-size: 20px; padding-inline: 18px 42px; }
 .burger { display: none; }
+.nav__link, .lang, .header__cta { white-space: nowrap; }
+/* laptop widths: spacing and type scale down with the viewport so the links never wrap or crowd the tools */
+@media (min-width: 961px) and (max-width: 1439px) {
+  .header__in { gap: clamp(12px, 1.7vw, 24px); }
+  .logo img { width: clamp(108px, 9vw, 130px); }
+  .nav { margin-inline-start: clamp(12px, 3.2vw, 46px); }
+  .nav__list { gap: clamp(24px, calc(12.5vw - 96px), 84px); } /* 32px at 1024 → 84px at 1440 */
+  .nav__link { font-size: clamp(17px, 1.46vw, 21px); }
+  .header__tools { gap: clamp(6px, 1.5vw, 22px); }
+  .lang { font-size: clamp(17px, 1.4vw, 20px); }
+  .header__cta { min-height: 40px; font-size: clamp(16px, 1.4vw, 20px); padding-inline: clamp(14px, 1.25vw, 18px) clamp(30px, 2.9vw, 42px); }
+}
 
 /* ---------- Hero ---------- */
 .hero { position: relative; isolation: isolate; background: var(--navy); color: var(--white); overflow: hidden; }
@@ -990,7 +1002,6 @@ body.is-locked { overflow: hidden; }
 
 /* ================= Responsive ================= */
 @media (max-width: 1240px) {
-  .nav__list { gap: 44px; }
   .footer__grid { grid-template-columns: 1fr 1fr 1fr; }
   .footer__brand { grid-column: 1 / -1; }
 }
