@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /offline
+Disallow: /en/offline
+
+Host: https://www.your-domain.com
+Sitemap: https://www.your-domain.com/sitemap.xml
