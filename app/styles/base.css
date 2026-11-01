@@ -297,7 +297,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ---------- Reveal on scroll ---------- */
 /* only hide reveal-on-scroll content when JavaScript can bring it back */
 @media (scripting: enabled) {
-  [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); transition-delay: calc(var(--d, 0) * 80ms); }
+  [data-reveal] { opacity: 0; transform: translateY(18px); } /* revealed by Motion (components/site/Reveal.tsx) */
   [data-reveal].is-in { opacity: 1; transform: none; }
 }
 

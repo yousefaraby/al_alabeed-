@@ -1,12 +1,15 @@
 'use client';
 
+import { animate, AnimatePresence, motion, useMotionValue, useTransform } from 'motion/react';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { KIND_ICON, KIND_LABEL, M, TYPES, USES, USE_ICONS, USE_LABEL, catalog, norm, type Kind, type Method, type TypeKey, type Use } from '@/lib/catalog';
 import type { Lang } from '@/lib/i18n';
+import { SMOOTH, SPRING } from '@/lib/motion';
+import { useOpenMotion } from '@/lib/useOpenMotion';
 import Icon from '../Icon';
 import ProductCard from '../ProductCard';
-import { useSite } from '../site/SiteProvider';
+import { useSiteStatic } from '../site/SiteProvider';
 
 
 const T = {
@@ -14,14 +17,14 @@ const T = {
     label: 'المنتجات', quick: 'فلاتر سريعة', all: 'الكل', filters: 'تصفية النتائج', close: 'إغلاق', clearAll: 'مسح الكل',
     types: 'النوع (حسب الكتالوج)', uses: 'حسب المكان', methods: 'طرق الفتح (للأقفال)', clear: 'مسح', show: 'عرض النتائج',
     search: 'ابحث في المنتجات', placeholder: 'ابحث: A21، بصمة، GM8S…', filter: 'تصفية',
-    count: (n: number, all: number) => <>عرض <strong>{n}</strong> من {all} منتجًا</>,
+    count: (n: number, all: number) => <>عرض <strong><Count n={n} /></strong> من {all} منتجًا</>,
     empty: 'لا توجد منتجات بهذه الفلاتر', emptyText: 'جرّب إزالة بعض الفلاتر أو البحث بكلمة أخرى.', emptyBtn: 'مسح الفلاتر',
   },
   en: {
     label: 'Products', quick: 'Quick filters', all: 'All', filters: 'Filter results', close: 'Close', clearAll: 'Clear all',
     types: 'Type (by catalog)', uses: 'By location', methods: 'Unlock methods (locks)', clear: 'Clear', show: 'Show results',
     search: 'Search products', placeholder: 'Search: A21, fingerprint, GM8S…', filter: 'Filter',
-    count: (n: number, all: number) => <>Showing <strong>{n}</strong> of {all} products</>,
+    count: (n: number, all: number) => <>Showing <strong><Count n={n} /></strong> of {all} products</>,
     empty: 'No products match these filters', emptyText: 'Try removing some filters or searching for something else.', emptyBtn: 'Clear filters',
   },
 };
@@ -38,7 +41,7 @@ function QueryWatcher({ onChange }: { onChange: (query: string) => void }) {
 /** Shop catalogue: quick chips, sidebar filters (a bottom sheet on phones), search, shareable URL. */
 export default function ShopCatalog({ lang }: { lang: Lang }) {
   const t = T[lang];
-  const { hooks } = useSite();
+  const { hooks } = useSiteStatic();
   const items = catalog(lang);
   const [kind, setKind] = useState('');
   const [uses, setUses] = useState(() => new Set<string>());
@@ -50,6 +53,10 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
   const [sheet, setSheet] = useState(false);
   const grid = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLElement>(null);
+  const sheetBd = useRef<HTMLDivElement>(null);
+  const phone = () => matchMedia('(max-width: 860px)').matches;
+  useOpenMotion(sheetRef, sheet, { opened: { transform: 'none' }, closed: { transform: 'translateY(105%)' }, when: phone });
+  useOpenMotion(sheetBd, sheet, { opened: { opacity: 1 }, closed: { opacity: 0 }, duration: 0.3, when: phone });
   const openBtn = useRef<HTMLButtonElement>(null);
 
   const hay = useMemo(() => Object.fromEntries(items.map((p) => [p.id, norm([p.title, p.cat, p.badge, p.desc || '', p.id, ...p.m.map((k) => M[k][lang])].join(' '))])), [items, lang]);
@@ -61,6 +68,11 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
     && (!methods.size || [...methods].every((m) => p.m.includes(m as Method)))
     && words.every((w) => hay[p.id].includes(w));
   const shown = items.filter(visible).length;
+  // cards coming back in arrive one after another (in grid order), not all at once
+  const prevShown = useRef<Set<string>>(new Set(items.map((p) => p.id)));
+  const entering = items.filter((p) => visible(p) && !prevShown.current.has(p.id)).map((p) => p.id);
+  const enterDelay = (id: string) => { const k = entering.indexOf(id); return k < 0 ? 0 : 0.12 + k * 0.04; };
+  useEffect(() => { prevShown.current = new Set(items.filter(visible).map((p) => p.id)); });
   const n = types.size + methods.size + uses.size + (kind ? 1 : 0) + (q ? 1 : 0);
   const side = types.size + methods.size + uses.size;
 
@@ -121,6 +133,7 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
 
   const toggleIn = (set: Set<string>, setter: (s: Set<string>) => void) => (e: ChangeEvent<HTMLInputElement>) => {
     const next = new Set(set); if (e.target.checked) next.add(e.target.value); else next.delete(e.target.value); setter(next);
+    animate(e.target, { scale: [0.8, 1.12, 1] }, { duration: 0.35, ease: SMOOTH }); // the tick pops
   };
 
   const typeKeys = (Object.keys(TYPES) as TypeKey[]).filter((k) => count((p) => p.type === k));
@@ -133,9 +146,10 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
       <section className="shop" id="catalog" aria-label={t.label}>
         <div className="container">
           <div className="chipbar" role="group" aria-label={t.quick} data-chipbar>
-            <button className="fchip" type="button" data-kind="" aria-pressed={kind === ''} onClick={() => setKind('')}>{t.all}</button>
+            <button className="fchip" type="button" data-kind="" aria-pressed={kind === ''} onClick={() => setKind('')}>{kind === '' && <Pill />}{t.all}</button>
             {(Object.keys(KIND_LABEL) as Kind[]).map((k) => (
               <button className="fchip" type="button" data-kind={k} aria-pressed={kind === k} onClick={() => setKind(k)} key={k}>
+                {kind === k && <Pill />}
                 <Icon id={KIND_ICON[k]} /><span>{KIND_LABEL[k][lang]}</span><span className="fchip__n">{count((p) => p.kind === k)}</span>
               </button>
             ))}
@@ -150,17 +164,17 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
                 <div className="filters__head"><h2>{t.filters}</h2><button className="filters__reset" type="button" data-reset hidden={!n} onClick={reset}>{t.clearAll}</button></div>
                 <fieldset className="fgroup"><legend>{t.types}</legend><div data-types>
                   {typeKeys.map((k) => (
-                    <label className="fopt" key={k}><input type="checkbox" value={k} data-type checked={types.has(k)} onChange={toggleIn(types, setTypes)} /><span>{TYPES[k][lang]}</span><span className="fopt__n">{count((p) => p.type === k)}</span></label>
+                    <motion.label className="fopt" key={k} whileTap={{ scale: 0.98 }}><input type="checkbox" value={k} data-type checked={types.has(k)} onChange={toggleIn(types, setTypes)} /><span>{TYPES[k][lang]}</span><span className="fopt__n">{count((p) => p.type === k)}</span></motion.label>
                   ))}
                 </div></fieldset>
                 <fieldset className="fgroup"><legend>{t.uses}</legend><div data-uses>
                   {useKeys.map((u) => (
-                    <label className="fopt" key={u}><input type="checkbox" value={u} data-use checked={uses.has(u)} onChange={toggleIn(uses, setUses)} /><span className="fopt__ic"><Icon id={USE_ICONS[u]} /></span><span>{USE_LABEL[u][lang]}</span><span className="fopt__n">{count((p) => p.uses.includes(u))}</span></label>
+                    <motion.label className="fopt" key={u} whileTap={{ scale: 0.98 }}><input type="checkbox" value={u} data-use checked={uses.has(u)} onChange={toggleIn(uses, setUses)} /><span className="fopt__ic"><Icon id={USE_ICONS[u]} /></span><span>{USE_LABEL[u][lang]}</span><span className="fopt__n">{count((p) => p.uses.includes(u))}</span></motion.label>
                   ))}
                 </div></fieldset>
                 <fieldset className="fgroup"><legend>{t.methods}</legend><div data-methods>
                   {methodKeys.map((m) => (
-                    <label className="fopt" key={m}><input type="checkbox" value={m} data-method checked={methods.has(m)} onChange={toggleIn(methods, setMethods)} /><span>{M[m][lang]}</span><span className="fopt__n">{count((p) => p.kind === 'lock' && p.m.includes(m))}</span></label>
+                    <motion.label className="fopt" key={m} whileTap={{ scale: 0.98 }}><input type="checkbox" value={m} data-method checked={methods.has(m)} onChange={toggleIn(methods, setMethods)} /><span>{M[m][lang]}</span><span className="fopt__n">{count((p) => p.kind === 'lock' && p.m.includes(m))}</span></motion.label>
                   ))}
                 </div></fieldset>
               </div>
@@ -182,7 +196,18 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
               <p className="shop__count" aria-live="polite" data-count>{t.count(shown, items.length)}</p>
             </div>
             <div className="shop__grid" id="models" data-grid ref={grid}>
-              {items.map((p, i) => <ProductCard p={p} lang={lang} variant="shop" index={i} hidden={!visible(p)} key={p.id} />)}
+              {/* cards fade out/in and the rest glide into their new places as filters change */}
+              <AnimatePresence initial={false} mode="popLayout">
+                {items.map((p, i) => visible(p) && (
+                  <motion.div className="pcard-slot" key={p.id} layout="position"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1, transition: { duration: 0.5, ease: SMOOTH, delay: enterDelay(p.id) } }}
+                    exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2, ease: SMOOTH } }}
+                    transition={{ layout: { type: 'spring', bounce: 0, duration: 0.6 } }}>
+                    <ProductCard p={p} lang={lang} variant="shop" index={i} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
               <div className="shop__empty" data-empty hidden={shown > 0}>
                 <h3>{t.empty}</h3>
                 <p>{t.emptyText}</p>
@@ -192,7 +217,20 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
           </div>
         </div>
       </section>
-      <div className={`filters-backdrop${sheet ? ' is-on' : ''}`} data-filters-close onClick={() => setSheet(false)} />
+      <div ref={sheetBd} className={`filters-backdrop${sheet ? ' is-on' : ''}`} data-filters-close onClick={() => setSheet(false)} />
     </>
   );
+}
+
+/** The navy highlight behind the selected quick filter; it glides between chips */
+function Pill() {
+  return <motion.span layoutId="shop-chip-pill" className="sel-pill" style={{ borderRadius: 999 }} transition={SPRING.glide} />;
+}
+
+/** The number of results rolls to its new value */
+function Count({ n }: { n: number }) {
+  const v = useMotionValue(n);
+  const shown = useTransform(v, (x) => Math.round(x));
+  useEffect(() => { const a = animate(v, n, { duration: 0.5, ease: SMOOTH }); return () => a.stop(); }, [n, v]);
+  return <motion.span>{shown}</motion.span>;
 }

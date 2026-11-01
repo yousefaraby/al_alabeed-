@@ -1,12 +1,18 @@
 'use client';
 
+import { AnimatePresence, motion, type PanInfo } from 'motion/react';
+import { AnimateView } from 'motion/react-animate-view';
 import Link from 'next/link';
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { flushSync } from 'react-dom';
+import { follow, fromBall, loaded, springBack, swipeAway } from '@/lib/colorMorph';
+import { EXPO as EXPO_CURVE, SPRING, play } from '@/lib/motion';
+import { takeCardNavigation } from '@/lib/morph';
 import { COLOR_IMGS, M, SW, USE_ICONS, USE_LABEL, byId, catalog, colorImg, imgSrc, waLink, type Finish } from '@/lib/catalog';
 import { href, type Lang } from '@/lib/i18n';
 import AddToQuote from '../AddToQuote';
 import Icon from '../Icon';
-import ProductCard from '../ProductCard';
+import ProductCard, { photoName } from '../ProductCard';
 
 const T = {
   ar: {
@@ -25,6 +31,7 @@ const T = {
   },
 };
 const EXPO = 'cubic-bezier(.16,1,.3,1)';
+const SMOOTH_CSS = 'cubic-bezier(.22,1,.36,1)';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Product details: gallery with a live finish picker, specs, add-to-quote and related products */
@@ -39,17 +46,29 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
   const info = useRef<HTMLDivElement>(null);
   const gallery = useRef<HTMLDivElement>(null);
   const swatches = useRef<HTMLUListElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const busy = useRef(false);
 
   // ?color=<finish> picks the finish; preload the finish photos, then play the entrance
-  useEffect(() => {
+  // applied before the first paint so a card → page morph already lands on the right finish
+  useLayoutEffect(() => {
     if (!p) return;
     const want = new URLSearchParams(location.search).get('color') as Finish | null;
-    if (want && want !== start && pickable.includes(want)) { setChosen(want); setSrc(colorImg(p.id, want)); }
+    const k = want && want !== start && pickable.includes(want) ? want : start;
+    if (k !== start) { setChosen(k); setSrc(colorImg(p.id, k!)); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+  useEffect(() => {
+    if (!p) return;
     pickable.forEach((k) => { const pre = new Image(); pre.src = colorImg(p.id, k); });
+    // arriving from a product card, the photo morphs into place on its own (view transition)
+    const morphing = takeCardNavigation();
     if (reduced()) return;
-    const els = [gallery.current!, ...info.current!.querySelectorAll(':scope > *:not([hidden])')];
-    els.forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 800, delay: 80 + i * 70, easing: EXPO, fill: 'both' }));
-    img.current?.animate([{ opacity: 0, transform: 'scale(.92) translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 1000, delay: 150, easing: EXPO, fill: 'both' });
+    const els = [...(morphing ? [] : [gallery.current!]), ...info.current!.querySelectorAll(':scope > *:not([hidden])')];
+    // once in place, hand the styles back to CSS (keeps the photo's drop shadow and hover effects)
+    const settle = (el: Element) => () => ['opacity', 'transform', 'filter'].forEach((p) => (el as HTMLElement).style.removeProperty(p));
+    els.forEach((el, i) => { play(el, [{ opacity: 0, transform: 'translateY(24px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0px)' }], { duration: 900, delay: 80 + i * 70, easing: SMOOTH_CSS, fill: 'both' }).onfinish = settle(el); });
+    if (!morphing && img.current) play(img.current, [{ opacity: 0, transform: 'scale(.9) translateY(14px)', filter: 'blur(10px)' }, { opacity: 1, transform: 'none', filter: 'blur(0px)' }], { duration: 1100, delay: 150, easing: SMOOTH_CSS, fill: 'both' }).onfinish = settle(img.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -68,23 +87,38 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
     );
   }
 
-  const setColor = (k: Finish) => {
-    if (k === chosen) return;
-    setChosen(k);
+  /** Switch finish: the swatch colour morphs into the photo, or the photo swipes over to the next one */
+  const setColor = async (k: Finish, how: { swatch: Element } | { dir: 1 | -1 }) => {
+    if (k === chosen || busy.current) return;
     const u = new URL(location.href); u.searchParams.set('color', k); history.replaceState(history.state, '', u);
-    const el = img.current;
-    if (!el || reduced()) { setSrc(colorImg(p.id, k)); return; }
-    el.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.96)' }], { duration: 160, easing: 'ease-in' }).onfinish = () => {
-      setSrc(colorImg(p.id, k));
-      el.animate([{ opacity: 0, transform: 'scale(1.03)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: EXPO });
-    };
+    const src = colorImg(p.id, k);
+    const commit = async () => { flushSync(() => { setChosen(k); setSrc(src); }); await loaded(img.current); };
+    busy.current = true;
+    try {
+      if ('swatch' in how && stage.current) await fromBall({ ball: how.swatch, frame: stage.current, img: img.current, src, commit });
+      else if ('dir' in how && img.current) await swipeAway(img.current, how.dir, src, commit);
+      else await commit();
+    } finally { busy.current = false; }
+  };
+  const dotOf = (k: Finish) => swatches.current?.querySelector(`[data-color="${k}"] i`) ?? stage.current!;
+  // swipe the photo to the next/previous finish
+  const swipeable = () => pickable.length > 1 && !!chosen && !busy.current && !!img.current;
+  // the photo follows the finger, then is thrown to the next finish or springs back
+  const onPan = (_: unknown, info: PanInfo) => { if (swipeable()) follow(img.current!, info.offset.x); };
+  const onPanEnd = (_: unknown, info: PanInfo) => {
+    if (!swipeable()) return;
+    if (Math.abs(info.offset.x) < 60 && Math.abs(info.velocity.x) < 450) { springBack(img.current!); return; }
+    const dir = info.offset.x < 0 ? -1 : 1;
+    const step = lang === 'ar' ? dir : -dir; // dragging toward the reading end moves forward
+    const i = pickable.indexOf(chosen!);
+    setColor(pickable[(i + step + pickable.length) % pickable.length], { dir: dir as 1 | -1 });
   };
   const onKey = (e: KeyboardEvent) => {
     const d = ({ ArrowRight: -1, ArrowLeft: 1, ArrowDown: 1, ArrowUp: -1 } as Record<string, number>)[e.key]; if (!d) return;
     e.preventDefault();
     const i = pickable.indexOf(chosen!), next = pickable[(i + d + pickable.length) % pickable.length];
     swatches.current?.querySelector<HTMLElement>(`[data-color="${next}"]`)?.focus();
-    setColor(next);
+    setColor(next, { swatch: dotOf(next) });
   };
 
   const label = chosen ? SW[chosen][1][lang] : '';
@@ -110,10 +144,15 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
           </nav>
           <div className="pdp__grid">
             <div className="pdp__gallery" ref={gallery}>
-              <div className={`pdp__stage${chosen ? ' is-color' : ''}`}>
+              <motion.div ref={stage} className={`pdp__stage${chosen ? ' is-color' : ''}${pickable.length > 1 ? ' is-swipe' : ''}`} onPan={onPan} onPanEnd={onPanEnd}>
                 <span className="pdp__badge" data-pdp-badge>{p.badge}</span>{' '}
-                <img data-pdp-img src={src} alt={chosen ? `${p.title} - ${label}` : p.title} decoding="async" ref={img} />
-              </div>
+                <AnimateView name={photoName(p.id)} transition={{ duration: 0.5, ease: EXPO_CURVE }}>
+                  <img data-pdp-img src={src} alt={chosen ? `${p.title} - ${label}` : p.title} decoding="async" ref={img} draggable={false} />
+                </AnimateView>
+                {pickable.length > 1 && (
+                  <span className="swipe-dots" aria-hidden="true">{pickable.map((k) => <i key={k} className={k === chosen ? 'on' : undefined} />)}</span>
+                )}
+              </motion.div>
             </div>
             <div className="pdp__info" ref={info}>
               <span className="pdp__cat" data-pdp-cat>{p.cat}</span>
@@ -128,13 +167,17 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
               </div>
               {pickable.length ? (
                 <div className="pdp__block is-picker" data-pdp-finishes>
-                  <h2>{t.pick} <span data-pdp-chosen>: {label}</span></h2>
+                  <h2>{t.pick} <span data-pdp-chosen><AnimatePresence initial={false} mode="popLayout"><motion.span key={label} style={{ display: 'inline-block' }} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>: {label}</motion.span></AnimatePresence></span></h2>
                   <ul className="pdp__swatches" role="radiogroup" aria-label={t.pickLabel} ref={swatches} onKeyDown={onKey}>
                     {pickable.map((k) => (
                       <li key={k}>
-                        <button type="button" role="radio" aria-checked={chosen === k} data-color={k} onClick={() => setColor(k)}>
-                          <i style={{ '--sw': SW[k][0] }} />{SW[k][1][lang]}
-                        </button>
+                        <motion.button type="button" role="radio" aria-checked={chosen === k} data-color={k} whileTap={{ scale: 0.95 }}
+                          onClick={(e) => setColor(k, { swatch: e.currentTarget.querySelector('i')! })}>
+                          {chosen === k && <motion.span layoutId="pdp-swatch-pill" className="sel-pill" style={{ borderRadius: 999 }} transition={SPRING.glide}
+                            animate={{ borderColor: pillColor(SW[k][0]), backgroundColor: pillColor(SW[k][0], 0.16) }} />}
+                          {/* the ball shows the product in this finish */}
+                          <i className="ball" style={{ '--sw': SW[k][0] }}><img src={colorImg(p.id, k)} alt="" loading="lazy" decoding="async" draggable={false} /></i>{SW[k][1][lang]}
+                        </motion.button>
                       </li>
                     ))}
                   </ul>
@@ -178,4 +221,11 @@ export default function ProductView({ lang, id }: { lang: Lang; id?: string }) {
       </section>
     </>
   );
+}
+
+/** The selection highlight in the finish colour (dark finishes are lifted so they read on the navy page) */
+function pillColor(hex: string, alpha = 1) {
+  let [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  if (0.2126 * r + 0.7152 * g + 0.0722 * b < 70) [r, g, b] = [150, 160, 196];
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }

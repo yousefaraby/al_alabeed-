@@ -1,5 +1,6 @@
 /* Home hero animation: springs + Web Animations, ported from the original page script.
    Runs against the markup rendered by <UnlockStage/> and returns a cleanup function. */
+import { play, type PlayOptions, type Played } from '@/lib/motion';
 type Spring = { x: number; v: number; t: number; k: number; c: number };
 
 export function runStage(root: HTMLDivElement) {
@@ -59,8 +60,8 @@ export function runStage(root: HTMLDivElement) {
   const kick = () => { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
 
   /* helpers */
-  let running: Animation[] = [], timers: ReturnType<typeof setTimeout>[] = [];
-  const anim = (el: Element, kf: Keyframe[], o: KeyframeAnimationOptions) => { const a = el.animate(kf, { fill: 'both', easing: EXPO, ...o }); running.push(a); return a; };
+  let running: Played[] = [], timers: ReturnType<typeof setTimeout>[] = [];
+  const anim = (el: Element, kf: Keyframe[], o: PlayOptions) => { const a = play(el, kf, { fill: 'both', easing: EXPO, ...o }); running.push(a); return a; };
   const later = (fn: () => void, ms: number) => timers.push(setTimeout(fn, ms));
   function clearFx() {
     running.forEach((a) => a.cancel()); running = []; timers.forEach(clearTimeout); timers = [];
@@ -135,11 +136,11 @@ export function runStage(root: HTMLDivElement) {
     const lines = qa<HTMLElement>('.ul-line > span');
     const write = () => { E.title.textContent = b.dataset.title!; E.desc.textContent = b.dataset.desc!; };
     if (REDUCED) return write();
-    lines.forEach((l, i) => l.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-110%)', opacity: 0 }], { duration: 200, delay: i * 30, easing: IN, fill: 'forwards' }));
+    lines.forEach((l, i) => play(l, [{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-110%)', opacity: 0 }], { duration: 200, delay: i * 30, easing: IN, fill: 'forwards' }));
     captionTimer = setTimeout(() => {
       if (current !== b) return;
       write();
-      lines.forEach((l, i) => l.animate([{ transform: 'translateY(110%)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], { duration: 560, delay: i * 70, easing: EXPO, fill: 'forwards' }));
+      lines.forEach((l, i) => play(l, [{ transform: 'translateY(110%)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], { duration: 560, delay: i * 70, easing: EXPO, fill: 'forwards' }));
     }, 260);
   }
 

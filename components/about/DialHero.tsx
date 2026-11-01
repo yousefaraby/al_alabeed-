@@ -1,5 +1,6 @@
 'use client';
 
+import { play, type Played } from '@/lib/motion';
 import { useEffect, useRef, type ReactNode } from 'react';
 
 /** About hero: a real dial photo whose numbered ring spins a safe combination and can be dragged. */
@@ -69,14 +70,15 @@ function runDial(hero: HTMLElement) {
     });
   }
   const EXPO = 'cubic-bezier(.16,1,.3,1)';
+  let fx: Played[] = []; // running dim/glow/tip/wave animations
   function settle() {
     media!.classList.add('is-ready');
-    dim.animate([{ opacity: .72 }, { opacity: 0 }], { duration: 700, easing: EXPO, fill: 'forwards' });
-    glow.animate([{ opacity: 0 }, { opacity: .85, offset: .25 }, { opacity: .18 }], { duration: 1400, easing: 'ease-out', fill: 'forwards' });
-    tip.animate([{ opacity: 0 }, { opacity: 1, offset: .2 }, { opacity: 0 }], { duration: 900, easing: 'ease-out' });
-    wave.animate([{ opacity: .7, transform: 'scale(.94)' }, { opacity: 0, transform: 'scale(1.1)' }], { duration: 1100, easing: EXPO });
+    fx.push(play(dim, [{ opacity: .72 }, { opacity: 0 }], { duration: 700, easing: EXPO, fill: 'forwards' }));
+    fx.push(play(glow, [{ opacity: 0 }, { opacity: .85, offset: .25 }, { opacity: .18 }], { duration: 1400, easing: 'ease-out', fill: 'forwards' }));
+    fx.push(play(tip, [{ opacity: 0 }, { opacity: 1, offset: .2 }, { opacity: 0 }], { duration: 900, easing: 'ease-out' }));
+    fx.push(play(wave, [{ opacity: .7, transform: 'scale(.94)' }, { opacity: 0, transform: 'scale(1.1)' }], { duration: 1100, easing: EXPO }));
   }
-  function unset() { dim.getAnimations().forEach((a) => a.cancel()); glow.getAnimations().forEach((a) => a.cancel()); dim.animate([{ opacity: 0 }, { opacity: .5 }], { duration: 250, fill: 'forwards' }); }
+  function unset() { fx.forEach((a) => a.cancel()); fx = []; play(dim, [{ opacity: 0 }, { opacity: .5 }], { duration: 250, fill: 'forwards' }); }
   async function combination() {
     // a real safe sequence: spin right, a full turn left, then right onto the mark
     await tween(TARGET + 200, 1150);           // right, past the number
@@ -89,7 +91,7 @@ function runDial(hero: HTMLElement) {
   const start = () => {
     hero.classList.add('is-in');
     if (REDUCED) { angle = TARGET; render(); (photo as SVGElement).style.opacity = '1'; dim.setAttribute('opacity', '0'); glow.setAttribute('opacity', '.18'); media!.classList.add('is-ready'); return; }
-    photo.animate([{ opacity: 0, transform: `translate(${FX}px, ${FY}px) scale(1.08) translate(${-FX}px, ${-FY}px)` }, { opacity: 1, transform: 'none' }], { duration: 1500, easing: EXPO, fill: 'forwards' });
+    fx.push(play(photo, [{ opacity: 0, transform: `translate(${FX}px, ${FY}px) scale(1.08) translate(${-FX}px, ${-FY}px)` }, { opacity: 1, transform: 'none' }], { duration: 1500, easing: EXPO, fill: 'forwards' }));
     timers.push(setTimeout(combination, 450));
   };
   if (document.readyState === 'complete') start(); else addEventListener('load', start);
@@ -111,7 +113,7 @@ function runDial(hero: HTMLElement) {
     ro?.disconnect();
     grab.removeEventListener('pointerdown', down); grab.removeEventListener('pointermove', move);
     grab.removeEventListener('pointerup', release); grab.removeEventListener('pointercancel', release);
-    [photo, dim, glow, tip, wave].forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
+    fx.forEach((a) => a.cancel());
     hero.classList.remove('is-in'); media!.classList.remove('is-ready');
   };
 }

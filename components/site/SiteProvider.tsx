@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { byId } from '@/lib/catalog';
+import { useOpenMotion } from '@/lib/useOpenMotion';
 import { dict, type Dict, type Lang } from '@/lib/i18n';
 
 export interface QuoteItem { id: string; qty: number }
@@ -32,6 +33,16 @@ export const useSite = () => {
   return s;
 };
 
+/** The parts of the site context that never change. Reading only these means a component does not
+    re-render when an overlay opens or the quote list changes (keeps the animated shop grid still). */
+type SiteStatic = Pick<Site, 'lang' | 't' | 'openOv' | 'closeOv' | 'say' | 'hooks'>;
+const StaticCtx = createContext<SiteStatic | null>(null);
+export const useSiteStatic = () => {
+  const s = useContext(StaticCtx);
+  if (!s) throw new Error('useSiteStatic outside SiteProvider');
+  return s;
+};
+
 export const store = {
   get<T>(k: string, d: T): T { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
   set(k: string, v: unknown) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
@@ -48,6 +59,8 @@ export default function SiteProvider({ lang, children }: { lang: Lang; children:
   const [stack, setStack] = useState<string[]>([]);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [toastOn, setToastOn] = useState(false);
+  const toastRef = useRef<HTMLDivElement>(null);
+  useOpenMotion(toastRef, toastOn, { opened: { opacity: 1, transform: 'translateY(0)' }, closed: { opacity: 0, transform: 'translateY(20px)' }, duration: 0.3 });
   const [chatOpen, setChatOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const openers = useRef(new Map<string, Element | null>());
@@ -150,10 +163,13 @@ export default function SiteProvider({ lang, children }: { lang: Lang; children:
     lang, t, list, toggleItem, setQty, bump, openOv, closeOv, isOpen, say, chatOpen, setChatOpen, hooks,
   }), [lang, t, list, toggleItem, setQty, bump, openOv, closeOv, isOpen, say, chatOpen, hooks]);
 
+  const fixed = useMemo<SiteStatic>(() => ({ lang, t, openOv, closeOv, say, hooks }), [lang, t, openOv, closeOv, say, hooks]);
+
   return (
+    <StaticCtx.Provider value={fixed}>
     <Ctx.Provider value={value}>
       {children}
-      <div className={`toast${toastOn ? ' is-on' : ''}`} role="status" aria-live="polite" data-toast>
+      <div className={`toast${toastOn ? ' is-on' : ''}`} role="status" aria-live="polite" data-toast ref={toastRef}>
         {toast && (
           <>
             <span>{toast.msg}</span>
@@ -164,5 +180,6 @@ export default function SiteProvider({ lang, children }: { lang: Lang; children:
         )}
       </div>
     </Ctx.Provider>
+    </StaticCtx.Provider>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import { motion } from 'motion/react';
 import { PARTNERS } from '@/lib/catalog';
 import type { Lang } from '@/lib/i18n';
 import Icon from '../Icon';
@@ -91,7 +92,7 @@ export default function Partners({ lang }: { lang: Lang }) {
         <div className="partners__top">
           <div><h2 id="partners-title">{t.title}</h2><p>{t.text}</p></div>
           <div className="tabs" role="tablist" aria-label={t.tabs} data-active={active}>
-            <span className="tabs__pill" aria-hidden="true" />
+            <motion.span className="tabs__pill" aria-hidden="true" initial={false} animate={{ x: `${active * (lang === 'ar' ? -100 : 100)}%` }} transition={{ type: 'spring', bounce: 0.18, duration: 0.55 }} />
             {KEYS.map((key, i) => (
               <Fragment key={key}>
                 {' '}

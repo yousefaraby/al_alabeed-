@@ -4,6 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { M, catalog, imgSrc, norm } from '@/lib/catalog';
 import { href } from '@/lib/i18n';
+import { useOpenMotion } from '@/lib/useOpenMotion';
 import Icon from '../Icon';
 import { useSite } from './SiteProvider';
 
@@ -14,6 +15,8 @@ export default function SearchOverlay() {
   const router = useRouter();
   const path = usePathname();
   const input = useRef<HTMLInputElement>(null);
+  const root = useRef<HTMLDivElement>(null);
+  useOpenMotion(root, open, { backdrop: '.backdrop', panel: '.search-panel', opened: { transform: 'none' }, closed: { transform: 'translateY(-100%)' } });
   const [value, setValue] = useState('');
   const index = useMemo(() => catalog(lang).map((p) => ({
     p, text: norm([p.title, p.cat, p.badge, p.desc || '', p.id, ...p.m.map((k) => M[k][lang]), s.hotelHint(p.cat)].join(' ')),
@@ -48,7 +51,7 @@ export default function SearchOverlay() {
   };
 
   return (
-    <div className={`search-overlay${open ? ' is-open' : ''}`} id="search" aria-hidden={!open}>
+    <div className={`search-overlay${open ? ' is-open' : ''}`} id="search" aria-hidden={!open} ref={root}>
       <div className="backdrop" data-close />
       <div className="search-panel" role="dialog" aria-modal="true" aria-label={t.search}>
         <div className="search-wrap">
