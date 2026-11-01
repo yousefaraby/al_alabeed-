@@ -5,6 +5,10 @@ import ProductCard from '@/components/ProductCard';
 import CtaBand from '@/components/sections/CtaBand';
 import FaqTeaser from '@/components/sections/FaqTeaser';
 import { featured } from '@/lib/catalog';
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = pageMetadata({ lang: 'en', path: '/' });
 
 export default function HomePage() {
   return (

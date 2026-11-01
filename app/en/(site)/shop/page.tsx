@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import JsonLd from '@/components/JsonLd';
+import { catalogLd, pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import CtaBand from '@/components/sections/CtaBand';
 import FaqTeaser from '@/components/sections/FaqTeaser';
@@ -6,12 +8,18 @@ import ShopCatalog from '@/components/shop/ShopCatalog';
 import ShopHero from '@/components/shop/ShopHero';
 import { shopQuery, type SearchParams } from '@/lib/search-params';
 
-export const metadata: Metadata = { title: 'Shop' };
+export const metadata: Metadata = pageMetadata({
+  lang: 'en',
+  path: '/shop',
+  title: 'Shop',
+  description: 'Browse RFID hotel locks, fingerprint, face and PIN smart locks, hotel room safes and power saver switches from Alabed Digital Lock, and request a quote on WhatsApp.',
+});
 
 export default async function ShopPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const initial = shopQuery(await searchParams);
   return (
     <>
+      <JsonLd data={catalogLd('en')} />
       {/* ================= Shop hero ================= */}
       <ShopHero lang="en">
         <span className="hero-bar" aria-hidden="true" />

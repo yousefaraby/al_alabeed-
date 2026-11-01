@@ -46,3 +46,21 @@ public/assets/           images, logo and fonts (unchanged)
 ```
 
 The quote list is kept in `localStorage` (`alabed-quote-list`), and quote requests open WhatsApp or email with the message pre-filled — there is still no backend.
+
+## SEO
+
+Set the public domain before deploying (see `.env.example`):
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://www.your-domain.com
+```
+
+Everything SEO-related lives in `lib/seo.ts`:
+
+- **Keywords**: site-wide Arabic and English search terms (`SITE_KEYWORDS`), extra terms per page (`PAGE_KEYWORDS`) and per product (`productKeywords`, built from the model, category, unlock methods, finishes and uses).
+- **Every page** has a title, description, keywords, a canonical URL, `hreflang` links between Arabic and English, and Open Graph / Twitter cards.
+- **Every product** gets its own description, keywords, all of its photos (main photo, extra angles and one per finish) as share images, and `Product` + `BreadcrumbList` structured data.
+- **`/sitemap.xml`** lists every page and product in both languages with their alternates, and every product photo as an image-sitemap entry. **`/robots.txt`** points to it.
+- Structured data also covers the company (`Organization`, `WebSite` with site search), the shop (`ItemList`) and the FAQ (`FAQPage`).
+
+After deploying, submit `https://<your-domain>/sitemap.xml` in Google Search Console.

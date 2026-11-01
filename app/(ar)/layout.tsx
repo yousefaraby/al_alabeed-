@@ -1,15 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type { ReactNode } from 'react';
+import { rootMetadata } from '@/lib/seo';
 import '../styles/base.css';
 import '../styles/rtl.css';
 import '../styles/sys.css';
 
-export const metadata: Metadata = {
-  title: { default: 'العابد ديجيتال لوك | حلول أمان متكاملة', template: '%s | العابد ديجيتال لوك' },
-  description: 'أقفال ذكية وخزن غرف وباور سيفر للفنادق والمنازل والمكاتب من العابد ديجيتال لوك.',
-  alternates: { languages: { en: '/en' } },
-};
+export const metadata: Metadata = rootMetadata('ar');
 export const viewport: Viewport = { themeColor: '#0F1432' };
 
 export default function ArabicRoot({ children }: { children: ReactNode }) {

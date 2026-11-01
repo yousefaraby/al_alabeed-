@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import AskForm from '@/components/contact/AskForm';
 import KeypadHero from '@/components/contact/KeypadHero';
 import { waLink } from '@/lib/catalog';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  lang: 'en',
+  path: '/contact',
   title: 'Contact us',
   description: 'Alabed Digital Lock: 25 years in electronic lock systems, and the sole authorized distributor of Goodum in Egypt. Smart locks, in-room safes and power savers for hotels, homes and offices from Alabed Digital Lock.',
-};
+});
 
 export default function ContactPage() {
   return (

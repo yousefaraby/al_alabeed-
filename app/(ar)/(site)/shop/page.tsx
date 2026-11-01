@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import JsonLd from '@/components/JsonLd';
+import { catalogLd, pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import CtaBand from '@/components/sections/CtaBand';
 import FaqTeaser from '@/components/sections/FaqTeaser';
@@ -6,12 +8,18 @@ import ShopCatalog from '@/components/shop/ShopCatalog';
 import ShopHero from '@/components/shop/ShopHero';
 import { shopQuery, type SearchParams } from '@/lib/search-params';
 
-export const metadata: Metadata = { title: 'المتجر' };
+export const metadata: Metadata = pageMetadata({
+  lang: 'ar',
+  path: '/shop',
+  title: 'المتجر',
+  description: 'تصفّح أقفال الفنادق RFID وأقفال البصمة والوجه والرمز السري والخزن الفندقية ومفاتيح توفير الطاقة (باور سيفر) من العابد ديجيتال لوك، واطلب عرض سعر على واتساب.',
+});
 
 export default async function ShopPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const initial = shopQuery(await searchParams);
   return (
     <>
+      <JsonLd data={catalogLd('ar')} />
       {/* ================= Shop hero ================= */}
       <ShopHero lang="ar">
         <span className="hero-bar" aria-hidden="true" />

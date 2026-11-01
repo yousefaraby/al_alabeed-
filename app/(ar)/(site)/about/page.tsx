@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import DialHero from '@/components/about/DialHero';
 import CtaBand from '@/components/sections/CtaBand';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  lang: 'ar',
+  path: '/about',
   title: 'من نحن',
   description: 'العابد ديجيتال لوك: 25 عامًا في أنظمة الأقفال الإلكترونية، والوكيل الوحيد المعتمد لشركة Goodum العالمية في مصر. أقفال ذكية وخزن غرف وباور سيفر للفنادق والمنازل والمكاتب من العابد ديجيتال لوك.',
-};
+});
 
 export default function AboutPage() {
   return (
