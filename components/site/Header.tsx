@@ -1,5 +1,6 @@
 'use client';
 
+import { isFlying } from '@/lib/flyToQuote';
 import { play } from '@/lib/motion';
 import { motion } from 'motion/react';
 import Link from 'next/link';
@@ -24,7 +25,8 @@ export default function Header() {
   const n = list.reduce((a, i) => a + i.qty, 0);
 
   useEffect(() => {
-    if (bump) countRef.current && play(countRef.current, [{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    // when a photo is flying in, the count pops as it lands instead
+    if (bump && !isFlying()) countRef.current && play(countRef.current, [{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.34,1.56,.64,1)' });
   }, [bump]);
   useEffect(() => setOpen(false), [path]);
   // on phones/tablets the menu drops down below the header

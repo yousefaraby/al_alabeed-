@@ -137,3 +137,10 @@ button.sw--ball[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--white), 0 0 0
 
 /* shop grid: leaving cards are positioned against the grid while the rest glide */
 .shop__grid { position: relative; }
+
+/* ---------- add to quote: the product photo flies into the header's quote-list button (lib/flyToQuote.ts) ---------- */
+.quote-fly { position: fixed; z-index: 70; pointer-events: none; overflow: hidden; border-radius: 18%;
+  background: radial-gradient(60% 55% at 50% 45%, #FFFFFF 0%, #F3F6FA 60%, #E6ECF3 100%);
+  box-shadow: 0 0 0 2px var(--accent), 0 14px 34px rgba(9, 12, 32, .32); will-change: transform; }
+.quote-fly img { position: absolute; inset: 8%; width: 84%; height: 84%; object-fit: contain; mix-blend-mode: multiply; }
+.quote-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent-light); pointer-events: none; }

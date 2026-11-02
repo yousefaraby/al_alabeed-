@@ -1,6 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
+import { flyToQuote } from '@/lib/flyToQuote';
 import Icon from './Icon';
 import { useSite } from './site/SiteProvider';
 
@@ -9,7 +10,7 @@ export default function AddToQuote({ id, className = 'btn btn--primary pcard__ad
   const { list, toggleItem, t } = useSite();
   const on = list.some((i) => i.id === id);
   return (
-    <motion.button className={className + (on ? ' is-added' : '')} type="button" data-add={id} aria-pressed={on} onClick={() => toggleItem(id)} whileTap={{ scale: 0.96 }}>
+    <motion.button className={className + (on ? ' is-added' : '')} type="button" data-add={id} aria-pressed={on} onClick={(e) => { if (!on) flyToQuote(e.currentTarget); toggleItem(id); }} whileTap={{ scale: 0.96 }}>
       {/* plus spins into a check (and back) */}
       <AnimatePresence initial={false} mode="popLayout">
         <motion.span key={on ? 'check' : 'plus'} style={{ display: 'inline-grid' }}
