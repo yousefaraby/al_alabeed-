@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import AskForm from '@/components/contact/AskForm';
-import KeypadHero from '@/components/contact/KeypadHero';
+import CallHero from '@/components/contact/CallHero';
 import { waLink } from '@/lib/catalog';
 
 export const metadata: Metadata = pageMetadata({
@@ -16,7 +16,7 @@ export default function ContactPage() {
   return (
     <>
       {/* ================= Contact hero ================= */}
-      <KeypadHero lang="en">
+      <CallHero lang="en">
         <span className="hero-bar" aria-hidden="true" />
         <div className="container ct-hero__grid">
           <div className="ct-hero__copy">
@@ -38,41 +38,8 @@ export default function ContactPage() {
               <a className="btn btn--outline btn--outline-light" href="tel:+201020450649"><svg className="ic"><use href="#i-phone" /></svg>Call us</a>
             </div>
           </div>
-          <div className="pad" aria-label="Interactive keypad: type a number or press call">
-            <div className="pad__glow" aria-hidden="true" />
-            <div className="pad__body">
-              <div className="pad__top">
-                <span className="pad__led" aria-hidden="true" />
-                <span className="pad__brand">ALABED</span>
-                <span className="pad__sig" aria-hidden="true"><i /><i /><i /></span>
-              </div>
-              <div className="pad__screen" aria-live="polite">
-                <span className="pad__num" data-pad-num></span>
-                {" "}
-                <span className="pad__status" data-pad-status></span>
-              </div>
-              <div className="pad__keys" role="group" aria-label="Number keys">
-                <button type="button" data-k="1">1</button>
-                <button type="button" data-k="2">2<small>ABC</small></button>
-                <button type="button" data-k="3">3<small>DEF</small></button>
-                {" "}
-                <button type="button" data-k="4">4<small>GHI</small></button>
-                <button type="button" data-k="5">5<small>JKL</small></button>
-                <button type="button" data-k="6">6<small>MNO</small></button>
-                {" "}
-                <button type="button" data-k="7">7<small>PQRS</small></button>
-                <button type="button" data-k="8">8<small>TUV</small></button>
-                <button type="button" data-k="9">9<small>WXYZ</small></button>
-                {" "}
-                <button type="button" data-k="*" aria-label="Clear">✱</button>
-                <button type="button" data-k="0">0<small>+</small></button>
-                <button type="button" data-k="#" aria-label="Backspace">#</button>
-              </div>
-              <a className="pad__call" href="tel:+201020450649" data-pad-call><svg className="ic"><use href="#i-phone" /></svg><span>Call</span></a>
-            </div>
-          </div>
         </div>
-      </KeypadHero>
+      </CallHero>
       {/* ================= Channels ================= */}
       <section className="section ct-channels" aria-label="Ways to reach us">
         <div className="container">
