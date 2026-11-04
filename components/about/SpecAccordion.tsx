@@ -23,7 +23,7 @@ const UI = {
 const ITEMS: Record<Lang, Item[]> = {
   ar: [
     {
-      icon: 'hotel', path: '/shop?use=hotel', img: '/assets/products/colors/a21-silver.webp', alt: 'قفل فندقي A21 فضي',
+      icon: 'hotel', path: '/shop?use=hotel', img: '/assets/products/colors/a21-black-1.webp', alt: 'قفل فندقي A21 أسود',
       title: 'كوالين إلكترونية فندقية', tags: ['بطاقات', 'ماستر كي', 'مقاومة للصدأ'],
       points: ['أداء عالٍ وموثوقية', 'تصميم أنيق وعصري', 'سهولة الاستخدام'],
       text: 'أحدث أنواع الكوالين الإلكترونية للفنادق، بمميزات متطورة وتصميم عصري يناسب جميع أنواع الفنادق والمنتجعات.',
@@ -55,7 +55,7 @@ const ITEMS: Record<Lang, Item[]> = {
   ],
   en: [
     {
-      icon: 'hotel', path: '/shop?use=hotel', img: '/assets/products/colors/a21-silver.webp', alt: 'A21 hotel lock in silver',
+      icon: 'hotel', path: '/shop?use=hotel', img: '/assets/products/colors/a21-black-1.webp', alt: 'A21 hotel lock in black',
       title: 'Electronic hotel locks', tags: ['Key cards', 'Master key', 'Rust-resistant'],
       points: ['High performance and reliability', 'Elegant, modern design', 'Easy to use'],
       text: 'The latest electronic locks for hotels, with advanced features and a modern design that suits every kind of hotel and resort.',

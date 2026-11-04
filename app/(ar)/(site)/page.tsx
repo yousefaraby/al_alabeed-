@@ -131,7 +131,7 @@ export default function HomePage() {
           </div>
           <div className="sols">
             <Link className="sol" href="/shop?use=hotel#catalog" data-type="hotel" data-reveal style={{ '--d': "0" }}>
-              <img src="/assets/products/colors/a21-silver.webp" alt="قفل فندقي A21 فضي ببطاقة RFID للفنادق | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/a21-black-1.webp" alt="قفل فندقي A21 أسود ببطاقة RFID للفنادق | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>الفنادق</h3>
               <p>قفل وخزنة وباور سيفر لكل غرفة.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>

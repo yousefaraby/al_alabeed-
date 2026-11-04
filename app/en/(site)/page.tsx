@@ -133,7 +133,7 @@ export default function HomePage() {
           </div>
           <div className="sols">
             <Link className="sol" href="/en/shop?use=hotel#catalog" data-type="hotel" data-reveal style={{ '--d': "0" }}>
-              <img src="/assets/products/colors/a21-silver.webp" alt="A21 RFID hotel lock in silver | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/a21-black-1.webp" alt="A21 RFID hotel lock in black | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Hotels</h3>
               <p>A lock, safe and power saver for every room.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
