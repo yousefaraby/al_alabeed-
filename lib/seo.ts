@@ -41,6 +41,9 @@ export const SITE_KEYWORDS: Record<Lang, string[]> = {
     'اقفال ذكية', 'اقفال فنادق', 'اقفال الكترونية', 'قفل الكتروني', 'كالون فندقي', 'كوالين فنادق', 'كالون بصمة', 'كالون الكتروني',
     'قفل باب بالبصمة', 'قفل باب بالكارت', 'كارت فندق', 'كروت فنادق', 'قفل كارت فندقي', 'خزنة فندق', 'خزنه فندقيه', 'خزنة ديجيتال',
     'باور سيفر فندقي', 'سويتش كارت', 'مفتاح الكارت للغرف', 'اقفال ذكية مصر', 'اسعار الاقفال الذكية',
+    // doorbells
+    'خزنة QNN', 'خزنة بكارت', 'خزنة كارت NFC', 'خزنة فندقية بالكارت',
+    'جرس فندقي', 'جرس باب الغرفة', 'جرس فنادق', 'جرس كهربائي للفنادق', 'لوحة عدم الإزعاج', 'لوحة رقم الغرفة', 'جرس عدم الازعاج', 'جرس ديجيتال',
   ],
   en: [
     'Alabed Digital Lock', 'Alabed locks', 'smart locks Egypt', 'smart door lock', 'electronic door lock', 'hotel door locks',
@@ -48,6 +51,8 @@ export const SITE_KEYWORDS: Record<Lang, string[]> = {
     'hotel room safe', 'hotel safe Egypt', 'electronic safe', 'power saver switch', 'hotel energy saving switch', 'key card power switch',
     'Goodum distributor Egypt', 'smart lock Cairo', 'smart lock price Egypt',
     'Alabed', 'Al Abed', 'Alabed Egypt', 'hotel lock Egypt', 'hotel card lock', 'hotel safe box', 'digital door lock Egypt',
+    'QNN safe', 'NFC card safe', 'hotel safe with card',
+    'hotel doorbell', 'hotel room doorbell', 'DND doorbell', 'do not disturb panel', 'digital room number sign', 'doorbell system Egypt',
   ],
 };
 
@@ -55,8 +60,8 @@ export const SITE_KEYWORDS: Record<Lang, string[]> = {
 export const PAGE_KEYWORDS: Record<string, Record<Lang, string[]>> = {
   '/': { ar: ['حلول أمان متكاملة', 'أقفال للفنادق والمنازل والمكاتب'], en: ['complete security solutions', 'locks for hotels, homes and offices'] },
   '/shop': {
-    ar: ['متجر أقفال ذكية', 'أسعار الأقفال الذكية', 'كتالوج أقفال فنادق', 'أقفال RFID', 'أقفال أوتوماتيكية', 'ملحقات أقفال الفنادق', 'جهاز برمجة كروت'],
-    en: ['smart lock shop', 'smart lock prices', 'hotel lock catalog', 'RFID locks', 'automatic smart locks', 'hotel lock accessories', 'RFID card encoder'],
+    ar: ['متجر أقفال ذكية', 'أسعار الأقفال الذكية', 'كتالوج أقفال فنادق', 'أقفال RFID', 'أقفال أوتوماتيكية', 'ملحقات أقفال الفنادق', 'جهاز برمجة كروت', 'أجراس الغرف'],
+    en: ['smart lock shop', 'smart lock prices', 'hotel lock catalog', 'RFID locks', 'automatic smart locks', 'hotel lock accessories', 'RFID card encoder', 'hotel doorbells'],
   },
   '/about': { ar: ['من نحن', '25 سنة خبرة أقفال إلكترونية', 'الوكيل المعتمد Goodum'], en: ['about Alabed', '25 years electronic locks', 'authorized Goodum distributor'] },
   '/faq': { ar: ['أسئلة الأقفال الذكية', 'تركيب قفل ذكي', 'ضمان الأقفال'], en: ['smart lock FAQ', 'smart lock installation', 'lock warranty'] },
@@ -71,15 +76,17 @@ export function productKeywords(p: Product, lang: Lang): string[] {
   const k = new Set<string>([p.title, p.cat, p.badge]);
   if (p.model) {
     k.add(p.model);
-    if (lang === 'ar') ['قفل', 'سعر قفل', 'قفل ذكي'].forEach((w) => k.add(`${w} ${p.model}`));
-    else [`${p.model} lock`, `${p.model} smart lock`, `${p.model} price Egypt`].forEach((w) => k.add(w));
+    // models are locks unless the product says otherwise (e.g. a safe)
+    const word = p.kind === 'lock' ? null : p.badge;
+    if (lang === 'ar') (word ? [word, `سعر ${word}`] : ['قفل', 'سعر قفل', 'قفل ذكي']).forEach((w) => k.add(`${w} ${p.model}`));
+    else (word ? [`${p.model} ${word.toLowerCase()}`, `${p.model} price Egypt`] : [`${p.model} lock`, `${p.model} smart lock`, `${p.model} price Egypt`]).forEach((w) => k.add(w));
   } else {
     k.add(lang === 'ar' ? `سعر ${p.title}` : `${p.title} price Egypt`);
   }
   p.m.forEach((m) => k.add(lang === 'ar' ? `قفل ${M[m].ar}` : `${M[m].en.toLowerCase()} lock`));
   p.sw.forEach((f) => k.add(lang === 'ar' ? `${p.badge} ${SW[f][1].ar}` : `${SW[f][1].en.toLowerCase()} ${p.badge.toLowerCase()}`));
   p.uses.forEach((u) => k.add(lang === 'ar' ? `${p.badge} ${USES[u].ar}` : `${p.badge.toLowerCase()} for ${USE_LABEL[u].en.toLowerCase()}`));
-  if (lang === 'ar' && p.model) ['كالون', 'سعر كالون'].forEach((w) => k.add(`${w} ${p.model}`));
+  if (lang === 'ar' && p.model && p.kind === 'lock') ['كالون', 'سعر كالون'].forEach((w) => k.add(`${w} ${p.model}`));
   k.add(BRAND[lang]);
   if (lang === 'ar') { k.add('العابد'); [...k].forEach((w) => k.add(plainArabic(w))); }
   return [...k];

@@ -47,12 +47,12 @@ export default function HomePage() {
       <section className="section" aria-labelledby="cat-title">
         <div className="container">
           <div className="head">
-            <div><h2 id="cat-title">Three categories, one system</h2><p>Pick what you need, or ask for the complete hotel-room package.</p></div>
+            <div><h2 id="cat-title">Four categories, one system</h2><p>Pick what you need, or ask for the complete hotel-room package.</p></div>
             <Link className="more" href="/en/shop">All products<svg className="ic"><use href="#i-arrow" /></svg></Link>
           </div>
           <div className="cats">
             <Link className="cat" href="/en/shop?kind=lock" data-reveal style={{ '--d': "0" }}>
-              <div className="cat__media"><img src="/assets/products/colors/gm6s-black.webp" alt="GM6S Pro automatic smart lock in black with face and fingerprint unlock | Alabed Digital Lock" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/colors/v81-black.webp" alt="Smart locks - V81 hotel lock in black with RFID card | Alabed Digital Lock" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>Smart locks</h3>
                 <p>RFID hotel locks, fingerprint + card + PIN locks, and automatic locks with face recognition.</p>
@@ -64,7 +64,7 @@ export default function HomePage() {
               <div className="cat__media"><img src="/assets/products/me-2043uzh-2.webp" alt="ME-2043UZH electronic hotel room safe | Alabed Digital Lock" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>Safes</h3>
-                <p>Hotel room safes with an electronic keypad and an emergency key lock.</p>
+                <p>Hotel room safes with an electronic keypad and an emergency key lock, plus the QNN model that opens with an NFC card.</p>
                 <span className="cat__link">Safe details<svg className="ic"><use href="#i-arrow" /></svg></span>
               </div>
             </Link>
@@ -75,6 +75,15 @@ export default function HomePage() {
                 <h3>Power saver</h3>
                 <p>A key-card switch for rooms: insert the card to turn on the power.</p>
                 <span className="cat__link">Power saver details<svg className="ic"><use href="#i-arrow" /></svg></span>
+              </div>
+            </Link>
+            {" "}
+            <Link className="cat" href="/en/shop?kind=bell" data-reveal style={{ '--d': "3" }}>
+              <div className="cat__media"><img src="/assets/products/doorbell-dnd.webp" alt="Room doorbells - electric doorbell with DND and digital room number | Alabed Digital Lock" loading="lazy" /></div>
+              <div className="cat__body">
+                <h3>Doorbells</h3>
+                <p>Room doorbells with Do not disturb, Make up room and the room number, made to your room numbers.</p>
+                <span className="cat__link">Doorbell details<svg className="ic"><use href="#i-arrow" /></svg></span>
               </div>
             </Link>
           </div>
@@ -101,8 +110,8 @@ export default function HomePage() {
           <div className="why">
             <div data-reveal style={{ '--d': "0" }}>
               <div className="why__mark" aria-hidden="true"><svg className="ic"><use href="#i-stack" /></svg></div>
-              <h3>Three categories, one supplier</h3>
-              <p>Locks, safes and power savers in one quote and one delivery.</p>
+              <h3>Four categories, one supplier</h3>
+              <p>Locks, safes, power savers and doorbells in one quote and one delivery.</p>
             </div>
             <div data-reveal style={{ '--d': "1" }}>
               <div className="why__mark" aria-hidden="true"><svg className="ic"><use href="#i-bed" /></svg></div>

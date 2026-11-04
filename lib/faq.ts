@@ -8,7 +8,7 @@ export const FAQ: Record<Lang, FaqGroup[]> = {
     {
       key: 'products', icon: 'stack', title: 'عن المنتجات',
       items: [
-        ['ماذا تبيع العابد؟', 'ثلاث فئات: أقفال ذكية للأبواب، وخزن غرف فندقية، ومفتاح توفير الطاقة (باور سيفر) للغرف.'],
+        ['ماذا تبيع العابد؟', 'أربع فئات: أقفال ذكية للأبواب، وخزن غرف فندقية، ومفتاح توفير الطاقة (باور سيفر) للغرف، وأجراس الغرف.'],
         ['هل المنتجات للفنادق فقط؟', 'لا. لدينا أقفال للمنازل والفلل والمكاتب والشقق، والخزنة مناسبة للبيت والمكتب أيضًا. الباور سيفر مخصص لغرف الفنادق.'],
       ],
     },
@@ -48,7 +48,7 @@ export const FAQ: Record<Lang, FaqGroup[]> = {
     {
       key: 'products', icon: 'stack', title: 'About our products',
       items: [
-        ['What does Alabed sell?', 'Three categories: smart door locks, in-room hotel safes, and an energy-saving switch (power saver) for rooms.'],
+        ['What does Alabed sell?', 'Four categories: smart door locks, in-room hotel safes, an energy-saving switch (power saver) for rooms, and room doorbells.'],
         ['Are the products only for hotels?', 'No. We have locks for homes, villas, offices and apartments, and the safe suits homes and offices too. The power saver is made for hotel rooms.'],
       ],
     },

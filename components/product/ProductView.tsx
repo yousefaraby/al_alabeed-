@@ -13,6 +13,7 @@ import { href, type Lang } from '@/lib/i18n';
 import AddToQuote from '../AddToQuote';
 import Icon from '../Icon';
 import ProductCard, { photoName } from '../ProductCard';
+import PhotoViewer, { type ViewerPhoto } from './PhotoViewer';
 
 const T = {
   ar: {
@@ -20,14 +21,14 @@ const T = {
     pick: 'اختر اللون', pickLabel: 'التشطيبات المتاحة', uses: 'مناسب لـ', ask: 'اسأل على واتساب', waText: 'مرحبًا العابد ديجيتال لوك، أريد الاستفسار عن',
     note: 'تحتاج المواصفات الفنية الكاملة أو سعرًا لمشروعك؟ أرسل لنا الموديل والكمية على واتساب ونرد عليك.',
     nf: 'المنتج غير موجود', nfText: 'ربما نُقل هذا المنتج. تصفّح المتجر لتجد ما يناسبك.', all: 'كل المنتجات',
-    related: 'منتجات مشابهة', relatedText: 'اختيارات أخرى من نفس الفئة',
+    related: 'منتجات مشابهة', relatedText: 'اختيارات أخرى من نفس الفئة', full: 'عرض الصورة بملء الشاشة', includes: 'مرفق مع المنتج',
   },
   en: {
     crumbs: 'Breadcrumb', home: 'Home', shop: 'Shop', model: 'Model', category: 'Category', methods: 'Unlock methods', finishes: 'Available finishes',
     pick: 'Choose a finish', pickLabel: 'Available finishes', uses: 'Suitable for', ask: 'Ask on WhatsApp', waText: 'Hello Alabed Digital Lock, I would like to ask about',
     note: 'Need the full technical specs or a price for your project? Send us the model and quantity on WhatsApp and we\'ll get back to you.',
     nf: 'Product not found', nfText: 'This product may have been moved. Browse the full shop instead.', all: 'All products',
-    related: 'Related products', relatedText: 'More from the same range',
+    related: 'Related products', relatedText: 'More from the same range', full: 'View photo full screen', includes: 'Comes with',
   },
 };
 const EXPO = 'cubic-bezier(.16,1,.3,1)';
@@ -49,6 +50,11 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
   const swatches = useRef<HTMLUListElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const busy = useRef(false);
+  const panned = useRef(false);
+  // full-screen viewer: which photo it shows (null = closed)
+  const [viewAt, setViewAt] = useState<number | null>(null);
+  const viewing = viewAt !== null;
+  const included = useRef<HTMLImageElement>(null);
 
   // ?color=<finish> picks the finish; preload the finish photos, then play the entrance
   // applied before the first paint so a card → page morph already lands on the right finish
@@ -122,13 +128,30 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
     setColor(next, { swatch: dotOf(next) });
   };
 
+  // full-screen photos: one per finish (or the single product photo); picking one there picks that finish here too
+  const photos: ViewerPhoto[] = pickable.length
+    ? pickable.map((k) => ({ key: k, src: colorImg(p.id, k), alt: photoAlt(p, lang, k), label: SW[k][1][lang], color: SW[k][0] }))
+    : [{ key: 'main', src, alt: photoAlt(p, lang) }];
+  // a device that comes with the product follows the product photos
+  const withIncluded = photos.length;
+  if (p.includes) photos.push({ key: 'includes', src: p.includes.img, alt: `${p.includes.name} - ${p.title} | ${lang === 'ar' ? 'العابد ديجيتال لوك' : 'Alabed Digital Lock'}`, label: p.includes.name });
+  const viewIndex = chosen ? Math.max(0, pickable.indexOf(chosen)) : 0;
+  const show = (i: number) => setViewAt(i);
+  const pickInViewer = (i: number) => {
+    setViewAt(i);
+    const k = pickable[i]; if (!k || k === chosen) return;
+    const u = new URL(location.href); u.searchParams.set('color', k); history.replaceState(history.state, '', u);
+    setChosen(k); setSrc(colorImg(p.id, k));
+  };
+  const openViewer = () => { if (panned.current) { panned.current = false; return; } if (!busy.current) show(viewIndex); };
+
   const label = chosen ? SW[chosen][1][lang] : '';
   const all = catalog(lang);
   // related: same type first, then same kind, then the rest
   const related = all.filter((q) => q.id !== p.id && q.type === p.type)
     .concat(all.filter((q) => q.id !== p.id && q.type !== p.type && q.kind === p.kind))
     .concat(all.filter((q) => q.id !== p.id && q.kind !== p.kind)).slice(0, 4);
-  const rows: [string, string][] = [...(p.model ? [[t.model, p.model] as [string, string]] : []), [t.category, p.cat]];
+  const rows: [string, string][] = [...(p.model ? [[t.model, p.model] as [string, string]] : []), [t.category, p.cat], ...(p.specs || [])];
 
   return (
     <>
@@ -145,11 +168,15 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
           </nav>
           <div className="pdp__grid">
             <div className="pdp__gallery" ref={gallery}>
-              <motion.div ref={stage} className={`pdp__stage${chosen ? ' is-color' : ''}${pickable.length > 1 ? ' is-swipe' : ''}`} onPan={onPan} onPanEnd={onPanEnd}>
+              <motion.div ref={stage} className={`pdp__stage${chosen ? ' is-color' : ''}${pickable.length > 1 ? ' is-swipe' : ''}`} onPan={onPan} onPanEnd={onPanEnd}
+                onPanStart={() => { panned.current = true; }} onPointerDown={() => { panned.current = false; }}>
                 <span className="pdp__badge" data-pdp-badge>{p.badge}</span>{' '}
                 <AnimateView name={photoName(p.id)} transition={{ duration: 0.5, ease: EXPO_CURVE }}>
-                  <img data-pdp-img src={src} alt={photoAlt(p, lang, chosen)} decoding="async" fetchPriority="high" ref={img} draggable={false} />
+                  <img data-pdp-img src={src} alt={photoAlt(p, lang, chosen)} decoding="async" fetchPriority="high" ref={img} draggable={false} onClick={openViewer} style={{ visibility: viewing && viewAt !== withIncluded ? 'hidden' : undefined }} />
                 </AnimateView>
+                <motion.button type="button" className="pdp__full" aria-label={t.full} title={t.full} onClick={() => show(viewIndex)} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}>
+                  <svg className="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </motion.button>
                 {pickable.length > 1 && (
                   <span className="swipe-dots" aria-hidden="true">{pickable.map((k) => <i key={k} className={k === chosen ? 'on' : undefined} />)}</span>
                 )}
@@ -193,6 +220,15 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
                 <h2>{t.uses}</h2>
                 <ul className="pdp__chips">{p.uses.map((k) => <li key={k}><Icon id={USE_ICONS[k] || 'check'} />{USE_LABEL[k][lang]}</li>)}</ul>
               </div>
+              {p.includes && (
+                <div className="pdp__block" data-pdp-includes>
+                  <h2>{t.includes}</h2>
+                  <button type="button" className="pdp__inc" onClick={() => show(withIncluded)} aria-label={`${p.includes.name} - ${t.full}`}>
+                    <span className="pdp__inc-media"><img ref={included} src={p.includes.img} alt={photos[withIncluded].alt} loading="lazy" decoding="async" draggable={false} style={{ visibility: viewAt === withIncluded ? 'hidden' : undefined }} /></span>
+                    <span className="pdp__inc-body"><b>{p.includes.name}</b><span>{p.includes.text}</span></span>
+                  </button>
+                </div>
+              )}
               <div className="pdp__actions">
                 <AddToQuote id={p.id} className="btn btn--primary pdp__add" />{' '}
                 <a className="btn btn--outline btn--outline-light pdp__wa" data-pdp-wa href={waLink(`${t.waText} ${p.title}${chosen ? ` - ${label}` : ''}`)} target="_blank" rel="noopener">
@@ -208,6 +244,7 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
           </div>
         </div>
       </section>
+      {viewing && <PhotoViewer lang={lang} photos={photos} index={viewAt} onIndex={pickInViewer} onClose={() => setViewAt(null)} from={() => (viewAt === withIncluded ? included.current : img.current)} />}
       {/* ================= Related ================= */}
       <section className="section pdp-rel" aria-labelledby="rel-title" data-pdp-rel hidden={!related.length}>
         <div className="container">

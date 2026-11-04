@@ -87,7 +87,7 @@ function ProductCard({ p, lang, variant, index = 0, className = '' }: Props) {
       <motion.div ref={media} className={`pcard__media${swipe ? ' is-swipe' : ''}`}
         onPanStart={() => { panned.current = true; }} onPan={swipe ? onPan : undefined} onPanEnd={swipe ? onPanEnd : undefined}
         onPointerDown={() => { panned.current = false; }}>
-        {variant === 'home' ? photo : <Link href={link} tabIndex={-1} aria-hidden="true" aria-label={p.title} onClick={toProduct}>{photo}</Link>}
+        <Link href={link} tabIndex={-1} aria-hidden="true" aria-label={p.title} onClick={toProduct}>{photo}</Link>
         <span className="badge">{p.badge}</span>
         {swipe && (
           <span className="swipe-dots" aria-hidden="true">
@@ -97,7 +97,7 @@ function ProductCard({ p, lang, variant, index = 0, className = '' }: Props) {
       </motion.div>
       <div className="pcard__body">
         <span className="pcard__cat">{p.cat}</span>
-        <h3>{variant === 'home' ? <span>{p.title}</span> : <Link className="pcard__link" href={link} onClick={markCardNavigation}>{p.title}</Link>}</h3>
+        <h3><Link className="pcard__link" href={link} onClick={markCardNavigation}>{p.title}</Link></h3>
         {p.desc ? <p className="pcard__desc">{p.desc}</p> : null}
         {variant !== 'related' && p.m.length > 0 && (
           <div className="dots" aria-label={t.methodsLabel}>

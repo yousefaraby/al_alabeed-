@@ -45,12 +45,12 @@ export default function HomePage() {
       <section className="section" aria-labelledby="cat-title">
         <div className="container">
           <div className="head">
-            <div><h2 id="cat-title">ثلاث فئات، منظومة واحدة</h2><p>اختر ما تحتاجه، أو اطلب الباقة الكاملة لغرف الفندق.</p></div>
+            <div><h2 id="cat-title">أربع فئات، منظومة واحدة</h2><p>اختر ما تحتاجه، أو اطلب الباقة الكاملة لغرف الفندق.</p></div>
             <Link className="more" href="/shop">كل المنتجات<svg className="ic"><use href="#i-arrow" /></svg></Link>
           </div>
           <div className="cats">
             <Link className="cat" href="/shop?kind=lock" data-reveal style={{ '--d': "0" }}>
-              <div className="cat__media"><img src="/assets/products/colors/gm6s-black.webp" alt="قفل ذكي أوتوماتيكي GM6S Pro أسود بالوجه والبصمة | العابد ديجيتال لوك" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/colors/v81-black.webp" alt="أقفال ذكية - قفل فندقي V81 أسود ببطاقة RFID | العابد ديجيتال لوك" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>الأقفال الذكية</h3>
                 <p>أقفال فندقية ببطاقات RFID، وأقفال ببصمة وبطاقة ورمز، وأقفال أوتوماتيكية بالتعرف على الوجه.</p>
@@ -62,7 +62,7 @@ export default function HomePage() {
               <div className="cat__media"><img src="/assets/products/me-2043uzh-2.webp" alt="خزنة غرف فندقية ME-2043UZH إلكترونية | العابد ديجيتال لوك" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>الخزن</h3>
-                <p>خزن غرف فندقية بلوحة أرقام إلكترونية وقفل طوارئ بمفتاح.</p>
+                <p>خزن غرف فندقية بلوحة أرقام إلكترونية وقفل طوارئ بمفتاح، وموديل QNN يفتح بكارت NFC.</p>
                 <span className="cat__link">تفاصيل الخزن<svg className="ic"><use href="#i-arrow" /></svg></span>
               </div>
             </Link>
@@ -73,6 +73,15 @@ export default function HomePage() {
                 <h3>باور سيفر</h3>
                 <p>مفتاح بطاقة للغرف: أدخل البطاقة لتشغيل الكهرباء.</p>
                 <span className="cat__link">تفاصيل الباور سيفر<svg className="ic"><use href="#i-arrow" /></svg></span>
+              </div>
+            </Link>
+            {" "}
+            <Link className="cat" href="/shop?kind=bell" data-reveal style={{ '--d': "3" }}>
+              <div className="cat__media"><img src="/assets/products/doorbell-dnd.webp" alt="أجراس الغرف - جرس كهربائي بلوحة عدم الإزعاج ورقم الغرفة الرقمي | العابد ديجيتال لوك" loading="lazy" /></div>
+              <div className="cat__body">
+                <h3>الأجراس</h3>
+                <p>أجراس للغرف بلوحة عدم الإزعاج وتنظيف الغرفة ورقم الغرفة، تُصنع حسب أرقام غرفك.</p>
+                <span className="cat__link">تفاصيل الأجراس<svg className="ic"><use href="#i-arrow" /></svg></span>
               </div>
             </Link>
           </div>
@@ -99,8 +108,8 @@ export default function HomePage() {
           <div className="why">
             <div data-reveal style={{ '--d': "0" }}>
               <div className="why__mark" aria-hidden="true"><svg className="ic"><use href="#i-stack" /></svg></div>
-              <h3>ثلاث فئات من مورد واحد</h3>
-              <p>أقفال وخزن وباور سيفر في عرض سعر واحد وتوريد واحد.</p>
+              <h3>أربع فئات من مورد واحد</h3>
+              <p>أقفال وخزن وباور سيفر وأجراس في عرض سعر واحد وتوريد واحد.</p>
             </div>
             <div data-reveal style={{ '--d': "1" }}>
               <div className="why__mark" aria-hidden="true"><svg className="ic"><use href="#i-bed" /></svg></div>
