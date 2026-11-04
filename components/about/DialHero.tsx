@@ -30,7 +30,7 @@ function runDial(hero: HTMLElement) {
     const r = media!.getBoundingClientRect(), W = r.width, H = r.height; if (!W || !H) return;
     const stacked = matchMedia('(max-width: 1100px)').matches;
     let s: number, cx: number, cy = H / 2;
-    if (stacked) { s = Math.min(W, H) / (RB * 2 + 110); cx = W / 2; cy = H / 2 + 6; }
+    if (stacked) { const box = Math.min(W, H / 1.12); s = box / (RB * 2 + 110); cx = W / 2; cy = box / 2 + 10; } // dial sits in the upper part, above the fade
     else {
       const t = copy.getBoundingClientRect();
       const free = RTL ? t.left - r.left : r.right - t.right;
@@ -71,6 +71,7 @@ function runDial(hero: HTMLElement) {
   }
   const EXPO = 'cubic-bezier(.16,1,.3,1)';
   let fx: Played[] = []; // running dim/glow/tip/wave animations
+  let intro: Played | null = null; // the photo's entrance: stays applied, it holds the photo visible
   function settle() {
     media!.classList.add('is-ready');
     fx.push(play(dim, [{ opacity: .72 }, { opacity: 0 }], { duration: 700, easing: EXPO, fill: 'forwards' }));
@@ -78,7 +79,7 @@ function runDial(hero: HTMLElement) {
     fx.push(play(tip, [{ opacity: 0 }, { opacity: 1, offset: .2 }, { opacity: 0 }], { duration: 900, easing: 'ease-out' }));
     fx.push(play(wave, [{ opacity: .7, transform: 'scale(.94)' }, { opacity: 0, transform: 'scale(1.1)' }], { duration: 1100, easing: EXPO }));
   }
-  function unset() { fx.forEach((a) => a.cancel()); fx = []; play(dim, [{ opacity: 0 }, { opacity: .5 }], { duration: 250, fill: 'forwards' }); }
+  function unset() { fx.forEach((a) => a.cancel()); fx = [play(dim, [{ opacity: 0 }, { opacity: .5 }], { duration: 250, fill: 'forwards' })]; }
   async function combination() {
     // a real safe sequence: spin right, a full turn left, then right onto the mark
     await tween(TARGET + 200, 1150);           // right, past the number
@@ -91,7 +92,7 @@ function runDial(hero: HTMLElement) {
   const start = () => {
     hero.classList.add('is-in');
     if (REDUCED) { angle = TARGET; render(); (photo as SVGElement).style.opacity = '1'; dim.setAttribute('opacity', '0'); glow.setAttribute('opacity', '.18'); media!.classList.add('is-ready'); return; }
-    fx.push(play(photo, [{ opacity: 0, transform: `translate(${FX}px, ${FY}px) scale(1.08) translate(${-FX}px, ${-FY}px)` }, { opacity: 1, transform: 'none' }], { duration: 1500, easing: EXPO, fill: 'forwards' }));
+    intro = play(photo, [{ opacity: 0, transform: `translate(${FX}px, ${FY}px) scale(1.08) translate(${-FX}px, ${-FY}px)` }, { opacity: 1, transform: 'none' }], { duration: 1500, easing: EXPO, fill: 'forwards' });
     timers.push(setTimeout(combination, 450));
   };
   if (document.readyState === 'complete') start(); else addEventListener('load', start);
@@ -114,6 +115,7 @@ function runDial(hero: HTMLElement) {
     grab.removeEventListener('pointerdown', down); grab.removeEventListener('pointermove', move);
     grab.removeEventListener('pointerup', release); grab.removeEventListener('pointercancel', release);
     fx.forEach((a) => a.cancel());
+    intro?.cancel();
     hero.classList.remove('is-in'); media!.classList.remove('is-ready');
   };
 }

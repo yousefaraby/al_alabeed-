@@ -1,7 +1,6 @@
 'use client';
 
 import { animate, inView, motionValue, scroll, springValue } from 'motion';
-import { motion, useScroll, useSpring } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { SMOOTH } from '@/lib/motion';
@@ -13,7 +12,7 @@ const MAGNET = '.btn--primary, .btn--navy, .chat-fab';
 /** section headings that wipe up into view (those already inside a revealed block are left alone) */
 const HEADINGS = '.head h2, .partners__top h2, .reviews__head h2, .faq__intro h2, .cta h2, .spec__head h2';
 /** images that drift slightly as the page scrolls past them: [selector, from, to] */
-const PARALLAX: [string, string, string][] = [['.cat__media img', '0 26px', '0 -26px'], ['.sol img', '0 18px', '0 -18px']];
+const PARALLAX: [string, string, string][] = [['.cat__media img', '0 26px', '0 -26px'], ['.sol img', '-50% 18px', '-50% -18px']];
 /** hero copy that eases up and fades as the hero scrolls away */
 const HERO_COPY = '.hero__copy, .ab-hero__grid > div, .ct-hero__copy, .shop-hero__copy, .fq-hero > .container';
 
@@ -127,13 +126,6 @@ export default function MotionFx() {
     return () => cleanups.forEach((c) => c());
   }, [path]);
 
-  return <ScrollProgress />;
-}
-
-/** Thin accent bar under the header showing how far down the page you are */
-function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
-  return <motion.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />;
+  return null;
 }
 

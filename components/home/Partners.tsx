@@ -87,7 +87,7 @@ export default function Partners({ lang }: { lang: Lang }) {
   };
 
   return (
-    <section className="section section--alt" aria-labelledby="partners-title">
+    <section className="section section--alt deco-b" aria-labelledby="partners-title">
       <div className="container">
         <div className="partners__top">
           <div><h2 id="partners-title">{t.title}</h2><p>{t.text}</p></div>

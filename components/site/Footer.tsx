@@ -2,6 +2,12 @@ import Link from 'next/link';
 import { dict, href, type Lang } from '@/lib/i18n';
 import Icon from '../Icon';
 
+const SOCIAL = [
+  ['fb', 'https://www.facebook.com/share/1KX2u9zruY/'],
+  ['ig', 'https://www.instagram.com/al.abed_digital_lock/'],
+  ['tiktok', 'https://www.tiktok.com/@alabed.digital.lo'],
+];
+
 export default function Footer({ lang }: { lang: Lang }) {
   const t = dict[lang];
   const f = t.footer;
@@ -18,7 +24,7 @@ export default function Footer({ lang }: { lang: Lang }) {
           <img src="/assets/logo/alabed-logo-white.webp" alt="ALABED Digital Lock" width="132" height="52" loading="lazy" />
           <p>{f.about}</p>
           <div className="social">
-            {['fb', 'ig', 'tiktok'].map((k, i) => <a href="#" aria-label={f.social[i]} key={k}><Icon id={k} hidden={false} /></a>)}
+            {SOCIAL.map(([k, url], i) => <a href={url} target="_blank" rel="noopener" aria-label={f.social[i]} key={k}><Icon id={k} hidden={false} /></a>)}
           </div>
         </div>
         <div><h3>{f.products}</h3>{list(f.productLinks)}</div>
@@ -38,7 +44,7 @@ export default function Footer({ lang }: { lang: Lang }) {
         <div className="footer__bottom">
           <p>{f.rights}</p>
           <br />
-          <p>{f.built} <Icon id="ext" hidden={false} /></p>
+          <p><a href="https://www.instagram.com/tricorewebsolutions/" target="_blank" rel="noopener" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{f.built} <Icon id="ext" hidden={false} /></a></p>
         </div>
       </div>
     </footer>

@@ -255,6 +255,35 @@ export default function IconSprite({ lang }: { lang: Lang }) {
             <path d="M20 4v4h-4" />
           </g>
         </symbol>
+        <symbol id="i-shield-spark" viewBox="3 0 25 25">
+          <g fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 4 4.5 7v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V7z" />
+            <path d="m9 13 2 2 4-4" />
+          </g>
+          <g fill="none" stroke="#FAAB08" strokeWidth="1.8" strokeLinecap="round">
+            <path d="M22.5 7.5 25 5.5" />
+            <path d="M20.5 4.5 21.5 1.5" />
+            <path d="M24.5 11h3" />
+          </g>
+        </symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="9.5" />
+            <path d="M12 2.5a14 14 0 0 0 0 19 14 14 0 0 0 0-19Z" />
+            <path d="M2.5 12h19" />
+            <path d="M3.8 7.5h16.4" />
+            <path d="M3.8 16.5h16.4" />
+          </g>
+        </symbol>
+        <symbol id="i-handshake" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+            <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+            <path d="m21 3 1 11h-2" />
+            <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+            <path d="M3 4h8" />
+          </g>
+        </symbol>
       </defs>
     </svg>
   );

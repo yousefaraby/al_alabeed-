@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import DialHero from '@/components/about/DialHero';
+import SpecAccordion from '@/components/about/SpecAccordion';
 import CtaBand from '@/components/sections/CtaBand';
 
 export const metadata: Metadata = pageMetadata({
@@ -89,10 +90,10 @@ export default function AboutPage() {
         </div>
       </DialHero>
       {/* ================= Who we are ================= */}
-      <section className="section ab-intro" aria-labelledby="intro-title">
+      <section className="section ab-intro deco-a" aria-labelledby="intro-title">
         <div className="container">
           <div className="ab-intro__grid">
-            <h2 id="intro-title" data-reveal>شركة{" "}<span>العابد ديجيتال لوك</span></h2>
+            <h2 id="intro-title" data-reveal><span>شركة العابد ديجيتال لوك</span></h2>
             <div className="ab-intro__text" data-reveal style={{ '--d': "1" }}>
               <p>
                 بخبرة تمتد لـ{" "}
@@ -105,51 +106,30 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="facts">
-            <div className="fact" data-reveal><strong>25{" "}<em>عامًا</em></strong><span>خبرة في مجال أنظمة الأقفال الإلكترونية</span></div>
-            <div className="fact" data-reveal style={{ '--d': "1" }}><strong>Goodum</strong><span>الوكيل الوحيد المعتمد للشركة العالمية في مصر</span></div>
+            <div className="fact" data-reveal>
+              <span className="fact__icon"><svg className="ic"><use href="#i-shield-spark" /></svg></span>
+              <div className="fact__body"><strong>25{" "}<em>عامًا</em></strong><span>خبرة في مجال أنظمة الأقفال الإلكترونية</span></div>
+            </div>
+            <div className="fact" data-reveal style={{ '--d': "1" }}>
+              <span className="fact__icon"><svg className="ic"><use href="#i-globe" /></svg></span>
+              <div className="fact__body"><strong>Goodum</strong><span>الوكيل الوحيد المعتمد للشركة العالمية في مصر</span></div>
+            </div>
             <div className="fact" data-reveal style={{ '--d': "2" }}>
-              <strong>جودة{" "}<em>+</em>{" "}دعم</strong>
-              <span>جودة عالمية ودعم فني محلي، من الفنادق الكبرى للمنازل</span>
+              <span className="fact__icon"><svg className="ic"><use href="#i-handshake" /></svg></span>
+              <div className="fact__body"><strong>جودة{" "}<em>+</em>{" "}دعم</strong>
+              <span>جودة عالمية ودعم فني محلي، من الفنادق الكبرى للمنازل</span></div>
             </div>
           </div>
         </div>
       </section>
       {/* ================= Specialties ================= */}
-      <section className="section section--alt" aria-labelledby="spec-title">
+      <section className="section section--alt deco-b" aria-labelledby="spec-title">
         <div className="container">
           <div className="spec__head">
             <div><h2 id="spec-title">متخصصون في</h2><p>كل ما تحتاجه غرفة الفندق أو باب البيت، من مورد واحد.</p></div>
             <Link className="more" href="/shop">كل المنتجات<svg className="ic"><use href="#i-arrow" /></svg></Link>
           </div>
-          <ol className="spec__list">
-            <li className="spec" data-reveal>
-              <span className="spec__n">01</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-hotel" /></svg></span>
-              <div className="spec__body"><h3>كوالين إلكترونية فندقية</h3><ul className="tags"><li>بطاقات</li><li>ماستر كي</li><li>مقاومة للصدأ</li></ul></div>
-              <Link className="spec__link" href="/shop?use=hotel">شاهد الموديلات<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-            <li className="spec" data-reveal>
-              <span className="spec__n">02</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-home" /></svg></span>
-              <div className="spec__body">
-                <h3>كوالين إلكترونية منزلية ذكية</h3>
-                <ul className="tags"><li>بصمة</li><li>وجه</li><li>كارت</li><li>رقم سري</li><li>تحكم عن طريق التطبيق</li></ul>
-              </div>
-              <Link className="spec__link" href="/shop?use=home">شاهد الموديلات<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-            <li className="spec" data-reveal>
-              <span className="spec__n">03</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-safe" /></svg></span>
-              <div className="spec__body"><h3>خزن فندقية آمنة</h3></div>
-              <Link className="spec__link" href="/shop?kind=safe">شاهد الموديلات<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-            <li className="spec" data-reveal>
-              <span className="spec__n">04</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-bolt" /></svg></span>
-              <div className="spec__body"><h3>أنظمة توفير الطاقة{" "}<small>(Power Saver)</small>{" "}للغرف الفندقية</h3></div>
-              <Link className="spec__link" href="/shop?kind=power">شاهد الموديلات<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-          </ol>
+          <SpecAccordion lang="ar" />
         </div>
       </section>
       {/* ================= CTA band ================= */}

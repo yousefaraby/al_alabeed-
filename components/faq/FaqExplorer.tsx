@@ -93,7 +93,7 @@ export default function FaqExplorer({ lang }: { lang: Lang }) {
         </div>
       </section>
       {/* ================= FAQ list ================= */}
-      <section className="section fq" aria-label={t.list}>
+      <section className="section fq deco-a" aria-label={t.list}>
         <div className="container">
           <div className="fq-chips" role="group" aria-label={t.list}>
             <button className="fq-chip" type="button" data-fq-cat="" aria-pressed={cat === ''} onClick={() => pick('')}>{cat === '' && <Pill />}{t.all}<span>{items.length}</span></button>

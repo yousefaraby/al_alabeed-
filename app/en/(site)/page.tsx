@@ -29,22 +29,12 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hero__anim">
-            <svg className="hero__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <defs>
-                <linearGradient id="heroPanel" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="#1A2150" stopOpacity=".9" />
-                  <stop offset="1" stopColor="#151B42" stopOpacity=".35" />
-                </linearGradient>
-              </defs>
-              <polygon className="fp" points="12,0 100,0 100,100 0,100" />
-              <polygon className="fe" points="96,3 9,3 0,97" />
-            </svg>
             <UnlockStage lang="en" />
           </div>
         </div>
       </section>
       {/* ================= Categories ================= */}
-      <section className="section" aria-labelledby="cat-title">
+      <section className="section deco-a" aria-labelledby="cat-title">
         <div className="container">
           <div className="head">
             <div><h2 id="cat-title">Four categories, one system</h2><p>Pick what you need, or ask for the complete hotel-room package.</p></div>
@@ -52,7 +42,7 @@ export default function HomePage() {
           </div>
           <div className="cats">
             <Link className="cat" href="/en/shop?kind=lock" data-reveal style={{ '--d': "0" }}>
-              <div className="cat__media"><img src="/assets/products/colors/v81-black.webp" alt="Smart locks - V81 hotel lock in black with RFID card | Alabed Digital Lock" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/colors/v81-silver.webp" alt="Smart locks - V81 hotel lock in silver with RFID card | Alabed Digital Lock" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>Smart locks</h3>
                 <p>RFID hotel locks, fingerprint + card + PIN locks, and automatic locks with face recognition.</p>
@@ -104,7 +94,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* ================= Why ================= */}
-      <section className="section section--alt section--gap" id="why" aria-labelledby="why-title">
+      <section className="section section--alt section--gap deco-b" id="why" aria-labelledby="why-title">
         <div className="container">
           <div className="head"><div><h2 id="why-title">Why Alabed?</h2></div></div>
           <div className="why">
@@ -132,7 +122,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* ================= Solutions ================= */}
-      <section className="section" aria-labelledby="sol-title">
+      <section className="section deco-a" aria-labelledby="sol-title">
         <div className="container">
           <div className="head">
             <div>
@@ -143,14 +133,14 @@ export default function HomePage() {
           </div>
           <div className="sols">
             <Link className="sol" href="/en/shop?use=hotel#catalog" data-type="hotel" data-reveal style={{ '--d': "0" }}>
-              <img src="/assets/products/colors/a21-black.webp" alt="A21 RFID hotel lock in black | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/a21-silver.webp" alt="A21 RFID hotel lock in silver | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Hotels</h3>
               <p>A lock, safe and power saver for every room.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/en/shop?use=home#catalog" data-type="home" data-reveal style={{ '--d': "1" }}>
-              <img src="/assets/products/colors/gm6s-black.webp" alt="GM6S Pro smart lock for homes and villas | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/gm6s-copper.webp" alt="GM6S Pro smart lock for homes and villas | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Homes &amp; villas</h3>
               <p>Face, fingerprint and PIN instead of keys, plus a safe for valuables.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
@@ -164,7 +154,7 @@ export default function HomePage() {
             </Link>
             {" "}
             <Link className="sol" href="/en/shop?use=apartment#catalog" data-type="apartment" data-reveal style={{ '--d': "3" }}>
-              <img src="/assets/products/colors/e68-black.webp" alt="E68 fingerprint lock in black for apartments | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/e68-silver.webp" alt="E68 fingerprint lock in silver for apartments | Alabed Digital Lock" aria-hidden="true" loading="lazy" />
               <h3>Apartments &amp; compounds</h3>
               <p>Fingerprint, PIN and card for every unit.</p>
               <span className="sol__link">See the solution<svg className="ic"><use href="#i-arrow" /></svg></span>
@@ -173,7 +163,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* ================= Reviews ================= */}
-      <section className="section section--alt section--reviews" aria-labelledby="rev-title">
+      <section className="section section--alt section--reviews deco-b" aria-labelledby="rev-title">
         <div className="container">
           <div className="reviews__head">
             <h2 id="rev-title">Customer reviews</h2>

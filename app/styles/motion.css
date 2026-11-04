@@ -107,10 +107,6 @@ button.sw--ball[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--white), 0 0 0
 @media (prefers-reduced-motion: reduce) { [data-reveal] { filter: none !important; } }
 
 /* ================= modern scroll & hover effects (components/site/MotionFx.tsx) ================= */
-/* scroll progress under the header */
-.scroll-progress { position: fixed; z-index: 49; top: 70px; inset-inline: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-soft)); transform-origin: right; pointer-events: none; }
-[dir="ltr"] .scroll-progress { transform-origin: left; }
-
 /* section headings start hidden below a mask and wipe up into view */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   :is(.head h2, .partners__top h2, .reviews__head h2, .faq__intro h2, .cta h2, .spec__head h2):not(.is-shown) { clip-path: inset(0 0 100% 0); translate: 0 22px; opacity: 0; }

@@ -143,7 +143,7 @@ export default function ShopCatalog({ lang }: { lang: Lang }) {
   return (
     <>
       <Suspense fallback={null}><QueryWatcher onChange={applyQuery} /></Suspense>
-      <section className="shop" id="catalog" aria-label={t.label}>
+      <section className="shop deco-a" id="catalog" aria-label={t.label}>
         <div className="container">
           <div className="chipbar" role="group" aria-label={t.quick} data-chipbar>
             <button className="fchip" type="button" data-kind="" aria-pressed={kind === ''} onClick={() => setKind('')}>{kind === '' && <Pill />}{t.all}</button>

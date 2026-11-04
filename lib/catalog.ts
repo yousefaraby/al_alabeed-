@@ -54,7 +54,7 @@ export const SW: Record<Finish, [string, Text]> = {
   white: ['#F1F1F1', { ar: 'أبيض', en: 'White' }],
   copper: ['#B8734A', { ar: 'نحاسي', en: 'Copper' }],
   cream: ['#ECE3C6', { ar: 'كريمي', en: 'Cream' }],
-  charcoal: ['#4A4D55', { ar: 'رمادي فحمي', en: 'Charcoal' }],
+  charcoal: ['#4A4D55', { ar: 'أسود', en: 'Black' }],
 };
 export const M: Record<Method, Text> = {
   card: { ar: 'بطاقة', en: 'Card' },
@@ -113,7 +113,7 @@ const CARD_PROGRAMMER: Text = { ar: 'جهاز برمجة كروت', en: 'Card pr
 
 const RAW: RawProduct[] = [
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v81', img: 'v81', model: 'V81', sw: ['black', 'silver', 'gold'] },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v31', img: 'v31', model: 'V31', sw: ['black', 'silver', 'gold'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'v31', img: 'colors/v31-silver', model: 'V31', sw: ['silver', 'gold'] },
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'a21', img: 'a21', model: 'A21', sw: ['black', 'silver', 'gold'] },
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k71', img: 'k71', model: 'K71', sw: ['black', 'silver'] },
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k51', img: 'k51', model: 'K51', sw: ['black'] },
@@ -127,7 +127,7 @@ const RAW: RawProduct[] = [
   { id: 'h58', img: 'h58', kind: 'lock', type: 'fppin', model: 'H58', m: ['finger', 'pin', 'card', 'key'], sw: ['black', 'silver', 'gold'], uses: ['home', 'apartment'] },
   { id: 'me2043', img: 'me-2043uzh', kind: 'safe', type: 'safe', name: { ar: 'خزنة فندقية ME-2043UZH', en: 'Hotel safe ME-2043UZH' }, desc: { ar: 'سلسلة ME الاقتصادية (مع وظيفة CEU)، تفتح برقم سري أو مفتاح', en: 'Economy ME series (with CEU function), opens with a PIN or key' }, m: ['pin', 'key'], sw: ['black'], uses: ['hotel', 'home'] },
   {
-    id: 'qnn', img: 'qnn-safe', kind: 'safe', type: 'safe', model: 'QNN Safe', m: ['card', 'pin', 'key'], sw: ['black', 'charcoal', 'cream'], uses: ['hotel', 'home'],
+    id: 'qnn', img: 'colors/qnn-charcoal', kind: 'safe', type: 'safe', model: 'QNN Safe', m: ['card', 'pin', 'key'], sw: ['charcoal', 'cream'], uses: ['hotel', 'home'],
     name: { ar: 'خزنة فندقية QNN Safe بكارت NFC', en: 'QNN Safe hotel safe with NFC card' },
     desc: { ar: 'تفتح بكارت NFC أو رقم سري أو مفتاح، والكروت تُبرمج بجهاز QNN Safe Controller', en: 'Opens with an NFC card, a PIN or a key; the cards are programmed with the QNN Safe Controller' },
     specs: {
@@ -140,7 +140,7 @@ const RAW: RawProduct[] = [
       text: { ar: 'يتعرف على كروت NFC ويبرمجها لتفتح الخزنة', en: 'Reads the NFC cards and programs them to open the safe' },
     },
   },
-  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'p21', img: 'p21', model: 'P21', sw: ['black', 'silver'] },
+  { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'p21', img: 'colors/p21-silver', model: 'P21', sw: ['silver'] },
 
   { id: 'ps', img: 'power-saver', kind: 'power', type: 'power', name: { ar: 'مفتاح توفير الطاقة (باور سيفر)', en: 'Energy-saving switch (power saver)' }, desc: { ar: 'أدخل البطاقة لتشغيل الكهرباء', en: 'Insert the card to turn on the power' }, m: ['card'], sw: ['white'], uses: ['hotel'] },
 
@@ -199,22 +199,28 @@ export const byId = (lang: Lang, id: string) => CATALOGS[lang].find((p) => p.id 
 
 /* Home page "featured models" */
 export const featured = (lang: Lang) =>
-  ['k81', 'a21', 'v81', 'e68', 'gm6s', 'me2043', 'ps']
+  ['k81', 'a21', 'v81', 'e68', 'gm6s', 'me2043', 'ps', 'dnd-bell']
     .map((id) => byId(lang, id)!)
     .map((p) => (p.id === 'ps' ? { ...p, badge: lang === 'ar' ? 'باور سيفر' : 'Power saver' } : p));
 
 /* Products with per-finish photos (assets/products/colors/<id>-<finish>.webp) */
 export const COLOR_IMGS: Record<string, Finish[]> = {
-  k71: ['black', 'silver'], k81: ['black', 'silver', 'gold'], v31: ['black', 'silver', 'gold'], v81: ['black', 'silver', 'gold'],
+  k71: ['black', 'silver'], k81: ['black', 'silver', 'gold'], v31: ['silver', 'gold'], v81: ['black', 'silver', 'gold'],
   a21: ['black', 'silver', 'gold'], e51: ['black', 'silver', 'gold'], e61: ['black', 'silver', 'gold'], e68: ['black', 'silver', 'gold'],
-  gm6s: ['black', 'copper'], p21: ['black', 'silver'], h58: ['black', 'silver', 'gold'], qnn: ['black', 'charcoal', 'cream'],
+  gm6s: ['black', 'copper'], p21: ['silver'], h58: ['black', 'silver', 'gold'], qnn: ['charcoal', 'cream'],
 };
-export const BLACK_IMG = ['k71', 'k81', 'v31', 'v81', 'a21', 'e51', 'e61', 'e68', 'p21', 'h58', 'gm6s'];
-export const imgSrc = (p: Pick<Product, 'id' | 'img' | 'sw'>) =>
-  p.sw.includes('black') && (BLACK_IMG.includes(p.id) || COLOR_IMGS[p.id]?.includes('black'))
-    ? `/assets/products/colors/${p.id}-black.webp`
-    : `/assets/products/${p.img}.webp`;
 export const colorImg = (id: string, finish: Finish) => `/assets/products/colors/${id}-${finish}.webp`;
+/** The finish a product opens on: locks show silver, or another finish than black when there is no silver */
+export function defaultFinish(p: Pick<Product, 'id' | 'kind' | 'sw'>): Finish | null {
+  const own = (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f));
+  if (!own.length) return null;
+  if (p.kind === 'lock') return own.includes('silver') ? 'silver' : own.find((f) => f !== 'black') ?? own[0];
+  return own.includes('black') ? 'black' : own[0];
+}
+export const imgSrc = (p: Pick<Product, 'id' | 'kind' | 'img' | 'sw'>) => {
+  const finish = defaultFinish(p);
+  return finish ? colorImg(p.id, finish) : `/assets/products/${p.img}.webp`;
+};
 
 /**
  * Alt text for a product photo, written for people and for Google Images:

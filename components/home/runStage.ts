@@ -22,7 +22,7 @@ export function runStage(root: HTMLDivElement) {
 
   /* springs */
   const spring = (v: number, k = 190, c = 21): Spring => ({ x: v, v: 0, t: v, k, c });
-  const CX = 710, CY = 420; // centre of the photo viewBox
+  const CX = 720, CY = 400; // centre of the photo viewBox
   const S = { x: spring(747.5), y: spring(209), r: spring(36, 150, 17), camX: spring(0, 60, 15), camY: spring(0, 60, 15), lock: spring(0, 120, 16) };
   let settled = 0, armed = false, raf = 0, last = 0;
 
@@ -164,13 +164,19 @@ export function runStage(root: HTMLDivElement) {
   let idx = 0, auto: ReturnType<typeof setInterval> | null = null;
   const tick = () => { idx = (idx + 1) % btns.length; select(btns[idx]); };
   const stopAuto = () => { if (auto) clearInterval(auto); auto = null; root.classList.remove('is-auto'); };
-  const clicks = btns.map((b, i) => { const fn = () => { stopAuto(); idx = i; select(b); }; b.addEventListener('click', fn); return fn; });
+  // autoplay carries on from the method that was picked (its timer restarts)
+  const startAuto = () => { if (REDUCED) return; stopAuto(); void root.offsetWidth; root.classList.add('is-auto'); auto = setInterval(tick, AUTO_MS); };
+  // keyboard users keep control: autoplay waits while focus is inside by keyboard
+  const onFocusIn = (e: FocusEvent) => { if ((e.target as Element).matches(':focus-visible')) stopAuto(); };
+  const onFocusOut = (e: FocusEvent) => { if (!root.contains(e.relatedTarget as Node | null)) startAuto(); };
+  const clicks = btns.map((b, i) => { const fn = () => { idx = i; select(b); startAuto(); }; b.addEventListener('click', fn); return fn; });
   select(btns[0], true);
   let io: IntersectionObserver | undefined;
   if (!REDUCED) {
     root.classList.add('is-auto');
     auto = setInterval(tick, AUTO_MS);
-    root.addEventListener('focusin', stopAuto);
+    root.addEventListener('focusin', onFocusIn);
+    root.addEventListener('focusout', onFocusOut);
     // pause when off-screen, resume when back
     io = new IntersectionObserver(([e]) => {
       if (!auto && !root.classList.contains('is-auto')) return;
@@ -186,7 +192,8 @@ export function runStage(root: HTMLDivElement) {
     clearTimeout(captionTimer);
     clearFx();
     io?.disconnect();
-    root.removeEventListener('focusin', stopAuto);
+    root.removeEventListener('focusin', onFocusIn);
+    root.removeEventListener('focusout', onFocusOut);
     root.classList.remove('is-auto');
     btns.forEach((b, i) => b.removeEventListener('click', clicks[i]));
   };

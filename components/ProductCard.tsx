@@ -99,30 +99,36 @@ function ProductCard({ p, lang, variant, index = 0, className = '' }: Props) {
         <span className="pcard__cat">{p.cat}</span>
         <h3><Link className="pcard__link" href={link} onClick={markCardNavigation}>{p.title}</Link></h3>
         {p.desc ? <p className="pcard__desc">{p.desc}</p> : null}
-        {variant !== 'related' && p.m.length > 0 && (
-          <div className="dots" aria-label={t.methodsLabel}>
-            {p.m.map((k) => (
-              <span className="dot" title={M[k][lang]} key={k}><Icon id={k} /><span className="sr-only">{M[k][lang]}</span></span>
-            ))}
+        {variant !== 'related' && (p.m.length > 0 || p.sw.length > 0) && (
+          <div className="pcard__opts">
+            {p.sw.length > 0 && (
+              <div className="swatches" aria-label={t.finishesLabel}>
+                {p.sw.map((k) => pickable.includes(k) ? (
+                  <motion.button type="button" className="sw sw--ball" style={{ '--sw': SW[k][0] }} aria-pressed={finish === k} key={k}
+                    animate={{ scale: finish === k ? 1.1 : 1 }} whileTap={{ scale: 0.82 }} transition={SPRING.pop} onClick={(e) => pick(k, e.currentTarget)}>
+                    <img src={colorImg(p.id, k)} alt={photoAlt(p, lang, k)} aria-hidden="true" loading="lazy" decoding="async" draggable={false} />
+                    <span className="sw-tip">{SW[k][1][lang]}</span>
+                    <span className="sr-only">{SW[k][1][lang]}</span>
+                  </motion.button>
+                ) : (
+                  <span className="sw" style={{ '--sw': SW[k][0] }} key={k}>
+                    <span className="sw-tip">{SW[k][1][lang]}</span>
+                    <span className="sr-only">{SW[k][1][lang]}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+            {p.m.length > 0 && (
+              <div className="dots" aria-label={t.methodsLabel}>
+                {p.m.map((k) => (
+                  <span className="dot" title={M[k][lang]} key={k}><Icon id={k} /><span className="sr-only">{M[k][lang]}</span></span>
+                ))}
+              </div>
+            )}
           </div>
         )}
         {variant !== 'related' && p.sw.length > 0 && (
           <>
-            <div className="swatches" aria-label={t.finishesLabel}>
-              {p.sw.map((k) => pickable.includes(k) ? (
-                <motion.button type="button" className="sw sw--ball" style={{ '--sw': SW[k][0] }} aria-pressed={finish === k} key={k}
-                  animate={{ scale: finish === k ? 1.1 : 1 }} whileTap={{ scale: 0.82 }} transition={SPRING.pop} onClick={(e) => pick(k, e.currentTarget)}>
-                  <img src={colorImg(p.id, k)} alt={photoAlt(p, lang, k)} aria-hidden="true" loading="lazy" decoding="async" draggable={false} />
-                  <span className="sw-tip">{SW[k][1][lang]}</span>
-                  <span className="sr-only">{SW[k][1][lang]}</span>
-                </motion.button>
-              ) : (
-                <span className="sw" style={{ '--sw': SW[k][0] }} key={k}>
-                  <span className="sw-tip">{SW[k][1][lang]}</span>
-                  <span className="sr-only">{SW[k][1][lang]}</span>
-                </span>
-              ))}
-            </div>
             {/* Finish chip: appears below swatches when a colour is chosen */}
             <AnimatePresence mode="wait">
               {finish && (

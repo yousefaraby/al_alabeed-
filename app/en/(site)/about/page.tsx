@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import DialHero from '@/components/about/DialHero';
+import SpecAccordion from '@/components/about/SpecAccordion';
 import CtaBand from '@/components/sections/CtaBand';
 
 export const metadata: Metadata = pageMetadata({
@@ -98,7 +99,7 @@ export default function AboutPage() {
         </div>
       </DialHero>
       {/* ================= Who we are ================= */}
-      <section className="section ab-intro" aria-labelledby="intro-title">
+      <section className="section ab-intro deco-a" aria-labelledby="intro-title">
         <div className="container">
           <div className="ab-intro__grid">
             <h2 id="intro-title" data-reveal><span>Alabed Digital Lock</span></h2>
@@ -116,54 +117,31 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="facts">
-            <div className="fact" data-reveal><strong>25{" "}<em>years</em></strong><span>of experience in electronic lock systems</span></div>
+            <div className="fact" data-reveal>
+              <span className="fact__icon"><svg className="ic"><use href="#i-shield-spark" /></svg></span>
+              <div className="fact__body"><strong>25{" "}<em>years</em></strong><span>of experience in electronic lock systems</span></div>
+            </div>
             <div className="fact" data-reveal style={{ '--d': "1" }}>
-              <strong>Goodum</strong>
-              <span>The global brand’s sole authorized distributor in Egypt</span>
+              <span className="fact__icon"><svg className="ic"><use href="#i-globe" /></svg></span>
+              <div className="fact__body"><strong>Goodum</strong>
+              <span>The global brand’s sole authorized distributor in Egypt</span></div>
             </div>
             <div className="fact" data-reveal style={{ '--d': "2" }}>
-              <strong>Quality{" "}<em>+</em>{" "}support</strong>
-              <span>World-class quality and local technical support, from major hotels to private homes</span>
+              <span className="fact__icon"><svg className="ic"><use href="#i-handshake" /></svg></span>
+              <div className="fact__body"><strong>Quality{" "}<em>+</em>{" "}support</strong>
+              <span>World-class quality and local technical support, from major hotels to private homes</span></div>
             </div>
           </div>
         </div>
       </section>
       {/* ================= Specialties ================= */}
-      <section className="section section--alt" aria-labelledby="spec-title">
+      <section className="section section--alt deco-b" aria-labelledby="spec-title">
         <div className="container">
           <div className="spec__head">
             <div><h2 id="spec-title">What we specialize in</h2><p>Everything a hotel room or a front door needs, from one supplier.</p></div>
             <Link className="more" href="/en/shop">All products<svg className="ic"><use href="#i-arrow" /></svg></Link>
           </div>
-          <ol className="spec__list">
-            <li className="spec" data-reveal>
-              <span className="spec__n">01</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-hotel" /></svg></span>
-              <div className="spec__body"><h3>Electronic hotel locks</h3><ul className="tags"><li>Key cards</li><li>Master key</li><li>Rust-resistant</li></ul></div>
-              <Link className="spec__link" href="/en/shop?use=hotel">View models<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-            <li className="spec" data-reveal>
-              <span className="spec__n">02</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-home" /></svg></span>
-              <div className="spec__body">
-                <h3>Smart electronic home locks</h3>
-                <ul className="tags"><li>Fingerprint</li><li>Face</li><li>Card</li><li>PIN code</li><li>App control</li></ul>
-              </div>
-              <Link className="spec__link" href="/en/shop?use=home">View models<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-            <li className="spec" data-reveal>
-              <span className="spec__n">03</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-safe" /></svg></span>
-              <div className="spec__body"><h3>Secure hotel safes</h3></div>
-              <Link className="spec__link" href="/en/shop?kind=safe">View models<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-            <li className="spec" data-reveal>
-              <span className="spec__n">04</span>
-              <span className="spec__icon"><svg className="ic"><use href="#i-bolt" /></svg></span>
-              <div className="spec__body"><h3>Energy-saving systems{" "}<small>(Power Saver)</small>{" "}for hotel rooms</h3></div>
-              <Link className="spec__link" href="/en/shop?kind=power">View models<svg className="ic"><use href="#i-arrow" /></svg></Link>
-            </li>
-          </ol>
+          <SpecAccordion lang="en" />
         </div>
       </section>
       {/* ================= CTA band ================= */}

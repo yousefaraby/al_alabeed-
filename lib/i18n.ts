@@ -25,7 +25,7 @@ const ar = {
     help: 'سنساعدك علي الاختيار',
     contact: 'تواصل معنا',
     rights: 'العابد ديجيتال لوك. جميع الحقوق محفوظة © 2026',
-    built: 'أُنشئ بواسطة Tricore Web Solutions',
+    built: 'POWERED BY TRICORE',
   },
   ql: {
     title: 'قائمة طلب السعر',
@@ -169,7 +169,7 @@ const en: Dict = {
     help: 'We’ll help you choose',
     contact: 'Contact us',
     rights: '© 2026 Alabed Digital Lock. All rights reserved.',
-    built: 'Built by Tricore Web Solutions',
+    built: 'POWERED BY TRICORE',
   },
   ql: {
     title: 'Quote list',

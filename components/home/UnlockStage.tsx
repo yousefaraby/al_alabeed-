@@ -8,10 +8,10 @@ type MethodKey = 'face' | 'finger' | 'pin' | 'card' | 'key';
 /* x / y / w: where each unlock method sits on the lock photo (viewBox units) */
 const METHODS: { m: MethodKey; icon: string; x: string; y: string; w: string }[] = [
   { m: 'face', icon: 'face', x: '747.5', y: '209', w: '72' },
-  { m: 'finger', icon: 'finger', x: '755', y: '448', w: '62' },
-  { m: 'pin', icon: 'pin', x: '752', y: '321', w: '122' },
-  { m: 'card', icon: 'card', x: '743.5', y: '154.5', w: '92' },
-  { m: 'key', icon: 'key', x: '751', y: '606', w: '104' },
+  { m: 'finger', icon: 'finger', x: '751.5', y: '477.5', w: '62' },
+  { m: 'pin', icon: 'pin', x: '751.5', y: '345.5', w: '122' },
+  { m: 'card', icon: 'card', x: '744', y: '131.5', w: '92' },
+  { m: 'key', icon: 'key', x: '751', y: '634.5', w: '104' },
 ];
 const TEXT: Record<Lang, { svg: string; group: string; methods: Record<MethodKey, [string, string, string]> }> = {
   ar: {
@@ -47,7 +47,7 @@ export default function UnlockStage({ lang }: { lang: Lang }) {
   return (
     <div className="ul-stage" data-ul-stage ref={ref}>
       <div className="ul-door">
-        <svg className="ul-svg" viewBox="189 15 1043 810" preserveAspectRatio="xMidYMid slice" role="img" aria-label={t.svg}>
+        <svg className="ul-svg" viewBox="151 -76 1137 960" preserveAspectRatio="xMidYMid slice" role="img" aria-label={t.svg}>
           <defs>
             <mask id="ul-hole" maskUnits="userSpaceOnUse" x="-400" y="-400" width="2500" height="1800">
               <rect x="-400" y="-400" width="2500" height="1800" fill="#fff" />
@@ -71,7 +71,7 @@ export default function UnlockStage({ lang }: { lang: Lang }) {
           </defs>
           <g data-ul="cam">
             {/* real product photo */}
-            <image href="/assets/hero-lock.webp" x="0" y="0" width="1670" height="942" preserveAspectRatio="none" />
+            <image href="/assets/hero-lock-v3.webp" x="114.4" y="-77.9" width="1289.7" height="1085.8" preserveAspectRatio="none" />
             {/* FACE: camera flicker + scan sweep */}
             <g className="ul-fx" data-fx="face">
               <circle data-o="iris" cx="747.5" cy="209" r="17" fill="none" stroke="#FDDC94" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
@@ -85,40 +85,40 @@ export default function UnlockStage({ lang }: { lang: Lang }) {
             </g>
             {/* FINGER: sensor ring traces + glows */}
             <g className="ul-fx" data-fx="finger">
-              <circle data-o="pad" cx="755" cy="448.5" r="26" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="draw" cx="755" cy="448.5" r="16" fill="none" stroke="#FAAB08" strokeWidth="3" pathLength="1" strokeDasharray="1 1" strokeDashoffset="1" vectorEffect="non-scaling-stroke" transform="rotate(-90 755 448.5)" />
+              <circle data-o="pad" cx="751.5" cy="477.5" r="26" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="draw" cx="751.5" cy="477.5" r="16" fill="none" stroke="#FAAB08" strokeWidth="3" pathLength="1" strokeDasharray="1 1" strokeDashoffset="1" vectorEffect="non-scaling-stroke" transform="rotate(-90 751.5 477.5)" />
             </g>
             {/* PIN: digits light up */}
             <g className="ul-fx" data-fx="pin">
-              <circle data-o="k" cx="730" cy="281.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="752.5" cy="281.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="773.5" cy="281.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="730" cy="307.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="752.5" cy="307.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="773.5" cy="307.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="730" cy="334" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="752.5" cy="334" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="773.5" cy="334" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="730" cy="361" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="752.5" cy="361" r="11" fill="url(#ul-glow-gold)" opacity="0" />
-              <circle data-o="k" cx="773.5" cy="361" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="725" cy="301" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="751.5" cy="301" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="777.5" cy="301" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="725" cy="330.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="751.5" cy="330.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="777.5" cy="330.5" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="725" cy="360" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="751.5" cy="360" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="777.5" cy="360" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="725" cy="390" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="751.5" cy="390" r="11" fill="url(#ul-glow-gold)" opacity="0" />
+              <circle data-o="k" cx="777.5" cy="390" r="11" fill="url(#ul-glow-gold)" opacity="0" />
             </g>
             {/* CARD: reader window at the top of the lock */}
             <g className="ul-fx" data-fx="card">
-              <rect data-o="pad" x="714" y="141" width="59" height="27" rx="3" fill="#FAAB08" opacity="0" style={{ mixBlendMode: "screen" }} />
-              <rect data-o="draw" x="714" y="141" width="59" height="27" rx="3" fill="none" stroke="#FAAB08" strokeWidth="2.5" pathLength="1" strokeDasharray="1 1" strokeDashoffset="1" vectorEffect="non-scaling-stroke" />
-              <circle data-o="arc" cx="743.5" cy="154.5" r="34" fill="none" stroke="#FAAB08" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
-              <circle data-o="arc" cx="743.5" cy="154.5" r="34" fill="none" stroke="#FAAB08" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
-              <circle data-o="arc" cx="743.5" cy="154.5" r="34" fill="none" stroke="#FAAB08" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
+              <rect data-o="pad" x="708" y="108.5" width="72" height="46" rx="3" fill="#FAAB08" opacity="0" style={{ mixBlendMode: "screen" }} />
+              <rect data-o="draw" x="708" y="108.5" width="72" height="46" rx="3" fill="none" stroke="#FAAB08" strokeWidth="2.5" pathLength="1" strokeDasharray="1 1" strokeDashoffset="1" vectorEffect="non-scaling-stroke" />
+              <circle data-o="arc" cx="744" cy="131.5" r="34" fill="none" stroke="#FAAB08" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
+              <circle data-o="arc" cx="744" cy="131.5" r="34" fill="none" stroke="#FAAB08" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
+              <circle data-o="arc" cx="744" cy="131.5" r="34" fill="none" stroke="#FAAB08" strokeWidth="2" opacity="0" vectorEffect="non-scaling-stroke" />
             </g>
             {/* KEY: hidden cylinder cover is traced */}
             <g className="ul-fx" data-fx="key">
-              <rect data-o="slotglow" x="728" y="560" width="46" height="93" rx="23" fill="#FAAB08" opacity="0" style={{ mixBlendMode: "screen" }} />
-              <rect data-o="draw" x="733" y="566" width="36" height="81" rx="18" fill="none" stroke="#FAAB08" strokeWidth="2.5" pathLength="1" strokeDasharray="1 1" strokeDashoffset="1" vectorEffect="non-scaling-stroke" />
+              <rect data-o="slotglow" x="729" y="588" width="44" height="93" rx="22" fill="#FAAB08" opacity="0" style={{ mixBlendMode: "screen" }} />
+              <rect data-o="draw" x="733.5" y="593.5" width="35" height="82" rx="17.5" fill="none" stroke="#FAAB08" strokeWidth="2.5" pathLength="1" strokeDasharray="1 1" strokeDashoffset="1" vectorEffect="non-scaling-stroke" />
             </g>
-            <rect x="-400" y="-400" width="2500" height="1800" fill="rgba(9,12,32,.5)" mask="url(#ul-hole)" />
+            <rect x="-400" y="-400" width="2500" height="1800" fill="rgba(9,12,32,.38)" mask="url(#ul-hole)" />
             {/* UNLOCKED: the real green LED strip flares */}
-            <ellipse data-ul="ok" cx="746" cy="730" rx="26" ry="52" fill="url(#ul-glow-green)" opacity="0" style={{ mixBlendMode: "screen", transformBox: "fill-box", transformOrigin: "center" }} />
+            <ellipse data-ul="ok" cx="748" cy="762" rx="26" ry="52" fill="url(#ul-glow-green)" opacity="0" style={{ mixBlendMode: "screen", transformBox: "fill-box", transformOrigin: "center" }} />
             <ellipse data-ul="wave" style={{ transformBox: "fill-box", transformOrigin: "center" }} cx="747.5" cy="209" rx="36" ry="36" fill="none" stroke="#FAAB08" strokeWidth="1" opacity="0" vectorEffect="non-scaling-stroke" />
             <ellipse data-ul="ring" cx="747.5" cy="209" rx="36" ry="36" fill="none" stroke="#FAAB08" strokeWidth="3" pathLength="100" strokeDasharray="100 0" vectorEffect="non-scaling-stroke" />
             <g data-ul="brackets" fill="none" stroke="#FAAB08" strokeWidth="2" strokeLinecap="square" opacity="0">

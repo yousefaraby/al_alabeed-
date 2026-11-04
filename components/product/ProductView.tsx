@@ -8,7 +8,7 @@ import { flushSync } from 'react-dom';
 import { follow, fromBall, loaded, springBack, swipeAway } from '@/lib/colorMorph';
 import { EXPO as EXPO_CURVE, SPRING, play } from '@/lib/motion';
 import { takeCardNavigation } from '@/lib/morph';
-import { COLOR_IMGS, M, SW, USE_ICONS, USE_LABEL, byId, catalog, colorImg, imgSrc, photoAlt, waLink, type Finish } from '@/lib/catalog';
+import { COLOR_IMGS, M, SW, USE_ICONS, USE_LABEL, byId, catalog, colorImg, defaultFinish, imgSrc, photoAlt, waLink, type Finish } from '@/lib/catalog';
 import { href, type Lang } from '@/lib/i18n';
 import AddToQuote from '../AddToQuote';
 import Icon from '../Icon';
@@ -41,7 +41,7 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
   const t = T[lang];
   const p = id ? byId(lang, id) : undefined;
   const pickable = p ? (COLOR_IMGS[p.id] || []).filter((k) => p.sw.includes(k)) : [];
-  const start: Finish | null = pickable.length ? (pickable.includes('black') ? 'black' : pickable[0]) : null;
+  const start: Finish | null = p ? defaultFinish(p) : null;
   const [chosen, setChosen] = useState<Finish | null>(start);
   const [src, setSrc] = useState(p ? (start ? colorImg(p.id, start) : imgSrc(p)) : '');
   const img = useRef<HTMLImageElement>(null);
@@ -246,7 +246,7 @@ export default function ProductView({ lang, id, summary }: { lang: Lang; id?: st
       </section>
       {viewing && <PhotoViewer lang={lang} photos={photos} index={viewAt} onIndex={pickInViewer} onClose={() => setViewAt(null)} from={() => (viewAt === withIncluded ? included.current : img.current)} />}
       {/* ================= Related ================= */}
-      <section className="section pdp-rel" aria-labelledby="rel-title" data-pdp-rel hidden={!related.length}>
+      <section className="section pdp-rel deco-b" aria-labelledby="rel-title" data-pdp-rel hidden={!related.length}>
         <div className="container">
           <div className="head">
             <div><h2 id="rel-title">{t.related}</h2><p>{t.relatedText}</p></div>

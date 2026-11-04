@@ -27,22 +27,12 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hero__anim">
-            <svg className="hero__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <defs>
-                <linearGradient id="heroPanel" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="#1A2150" stopOpacity=".9" />
-                  <stop offset="1" stopColor="#151B42" stopOpacity=".35" />
-                </linearGradient>
-              </defs>
-              <polygon className="fp" points="0,0 88,0 100,100 0,100" />
-              <polygon className="fe" points="4,3 91,3 100,97" />
-            </svg>
             <UnlockStage lang="ar" />
           </div>
         </div>
       </section>
       {/* ================= Categories ================= */}
-      <section className="section" aria-labelledby="cat-title">
+      <section className="section deco-a" aria-labelledby="cat-title">
         <div className="container">
           <div className="head">
             <div><h2 id="cat-title">أربع فئات، منظومة واحدة</h2><p>اختر ما تحتاجه، أو اطلب الباقة الكاملة لغرف الفندق.</p></div>
@@ -50,7 +40,7 @@ export default function HomePage() {
           </div>
           <div className="cats">
             <Link className="cat" href="/shop?kind=lock" data-reveal style={{ '--d': "0" }}>
-              <div className="cat__media"><img src="/assets/products/colors/v81-black.webp" alt="أقفال ذكية - قفل فندقي V81 أسود ببطاقة RFID | العابد ديجيتال لوك" loading="lazy" /></div>
+              <div className="cat__media"><img src="/assets/products/colors/v81-silver.webp" alt="أقفال ذكية - قفل فندقي V81 فضي ببطاقة RFID | العابد ديجيتال لوك" loading="lazy" /></div>
               <div className="cat__body">
                 <h3>الأقفال الذكية</h3>
                 <p>أقفال فندقية ببطاقات RFID، وأقفال ببصمة وبطاقة ورمز، وأقفال أوتوماتيكية بالتعرف على الوجه.</p>
@@ -102,7 +92,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* ================= Why ================= */}
-      <section className="section section--alt section--gap" id="why" aria-labelledby="why-title">
+      <section className="section section--alt section--gap deco-b" id="why" aria-labelledby="why-title">
         <div className="container">
           <div className="head"><div><h2 id="why-title">لماذا العابد ؟</h2></div></div>
           <div className="why">
@@ -130,7 +120,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* ================= Solutions ================= */}
-      <section className="section" aria-labelledby="sol-title">
+      <section className="section deco-a" aria-labelledby="sol-title">
         <div className="container">
           <div className="head">
             <div>
@@ -141,14 +131,14 @@ export default function HomePage() {
           </div>
           <div className="sols">
             <Link className="sol" href="/shop?use=hotel#catalog" data-type="hotel" data-reveal style={{ '--d': "0" }}>
-              <img src="/assets/products/colors/a21-black.webp" alt="قفل فندقي A21 أسود ببطاقة RFID للفنادق | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/a21-silver.webp" alt="قفل فندقي A21 فضي ببطاقة RFID للفنادق | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>الفنادق</h3>
               <p>قفل وخزنة وباور سيفر لكل غرفة.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>
             </Link>
             {" "}
             <Link className="sol" href="/shop?use=home#catalog" data-type="home" data-reveal style={{ '--d': "1" }}>
-              <img src="/assets/products/colors/gm6s-black.webp" alt="قفل ذكي GM6S Pro للمنازل والفلل | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/gm6s-copper.webp" alt="قفل ذكي GM6S Pro للمنازل والفلل | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>المنازل والفلل</h3>
               <p>وجه وبصمة ورمز بدل المفتاح، وخزنة للمقتنيات.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>
@@ -162,7 +152,7 @@ export default function HomePage() {
             </Link>
             {" "}
             <Link className="sol" href="/shop?use=apartment#catalog" data-type="apartment" data-reveal style={{ '--d': "3" }}>
-              <img src="/assets/products/colors/e68-black.webp" alt="قفل بصمة E68 أسود للشقق والكمباوندات | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
+              <img src="/assets/products/colors/e68-silver.webp" alt="قفل بصمة E68 فضي للشقق والكمباوندات | العابد ديجيتال لوك" aria-hidden="true" loading="lazy" />
               <h3>الشقق والكمباوندات</h3>
               <p>بصمة ورمز وبطاقة لكل وحدة.</p>
               <span className="sol__link">اعرف الحل<svg className="ic"><use href="#i-arrow" /></svg></span>
@@ -171,7 +161,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* ================= Reviews ================= */}
-      <section className="section section--alt section--reviews" aria-labelledby="rev-title">
+      <section className="section section--alt section--reviews deco-b" aria-labelledby="rev-title">
         <div className="container">
           <div className="reviews__head"><h2 id="rev-title">آراء العملاء</h2><p>نعتز بثقة عملائنا ونسعى دائمًا لتقديم تجربة تفوق توقعاتهم في كل مشروع</p></div>
           <div className="revs">

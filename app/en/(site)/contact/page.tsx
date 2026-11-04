@@ -41,7 +41,7 @@ export default function ContactPage() {
         </div>
       </CallHero>
       {/* ================= Channels ================= */}
-      <section className="section ct-channels" aria-label="Ways to reach us">
+      <section className="section ct-channels deco-a" aria-label="Ways to reach us">
         <div className="container">
           <div className="channels">
             <a className="channel" href="tel:+201020450649" data-reveal style={{ '--d': "0" }}>
@@ -83,9 +83,10 @@ export default function ContactPage() {
         </div>
       </section>
       {/* ================= Forms ================= */}
-      <section className="section section--alt ct-forms" aria-label="Forms">
+      <section className="section section--alt ct-forms deco-b" aria-label="Forms">
         <div className="container ct-forms__grid">
           <div className="quote-card" data-reveal>
+            <img className="quote-art" src="/assets/quote-art.svg" alt="" aria-hidden="true" width={220} height={220} loading="lazy" />
             <h2>Request a quote</h2>
             <p>Locks, safes, power savers or the full package. 4 short steps.</p>
             <ol className="steps4">

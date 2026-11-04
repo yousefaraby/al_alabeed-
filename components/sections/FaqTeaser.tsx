@@ -28,7 +28,7 @@ const TEXT = {
 export default function FaqTeaser({ lang }: { lang: Lang }) {
   const t = TEXT[lang];
   return (
-    <section className="section" id="faq" aria-labelledby="faq-title">
+    <section className="section deco-a" id="faq" aria-labelledby="faq-title">
       <div className="container faq">
         <div className="faq__intro">
           <h2 id="faq-title">{t.title}</h2>

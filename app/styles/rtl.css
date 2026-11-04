@@ -14,8 +14,8 @@
 .ab-media__hint .ic { width: 14px; height: 14px; }
 .ab-media.is-ready .ab-media__hint { opacity: .85; }
 @media (max-width: 1100px) {
-  .ab-hero__grid { grid-template-columns: 1fr; min-height: 0; pointer-events: auto; }
-  .ab-media { position: relative; inset: auto; height: min(88vw, 480px); }
+  .ab-hero__grid { grid-template-columns: 1fr; min-height: 0; margin-top: -44px; pointer-events: auto; }
+  .ab-media { position: relative; inset: auto; height: min(112vw, 540px); -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 88px), transparent 100%); mask-image: linear-gradient(180deg, #000 calc(100% - 88px), transparent 100%); }
   .ab-media::after { display: none; }
 }
 .pcard__link { color: inherit; }
@@ -138,7 +138,8 @@
 @media (max-width: 960px) {
   .shop-hero { flex-direction: column; align-items: stretch; min-height: 0; }
   .shop-hero::before { background: radial-gradient(80% 50% at 50% 20%, #172052 0%, rgba(23,32,82,0) 70%); }
-  .shop-media { position: relative; inset: auto; z-index: 0; width: 100%; height: min(96vw, 440px); max-width: none; aspect-ratio: auto; }
+  .shop-media { position: relative; inset: auto; z-index: 0; width: 100%; height: min(96vw, 440px); max-width: none; aspect-ratio: auto; -webkit-mask-image: linear-gradient(180deg, #000 66%, transparent 100%); mask-image: linear-gradient(180deg, #000 66%, transparent 100%); }
+  .shop-hero__in { position: relative; z-index: 1; margin-top: -72px; padding-top: 0; }
   .shop-hero__copy { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) { .shop-media__photo { opacity: 1; } }
