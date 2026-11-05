@@ -41,7 +41,7 @@ jobs:
           timeout: 600000
           concurrency: 1
           protocol: ftps
-          state-name: .ftp-deploy-state-v2.json
+          state-name: .ftp-deploy-state-v3.json
           exclude: |
             **/.htaccess
             **/.ftpquota
