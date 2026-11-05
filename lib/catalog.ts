@@ -209,9 +209,16 @@ export const COLOR_IMGS: Record<string, Finish[]> = {
   a21: ['black', 'silver', 'gold'], e51: ['black', 'silver', 'gold'], e61: ['black', 'silver', 'gold'], e68: ['black', 'silver', 'gold'],
   gm6s: ['black', 'copper'], p21: ['silver'], h58: ['black', 'silver', 'gold'], qnn: ['charcoal', 'cream'],
 };
-export const colorImg = (id: string, finish: Finish) => `/assets/products/colors/${id}-${finish}${IMG_SUFFIX[id] ?? ''}.webp`;
 /** Products whose color-image filenames have an extra suffix (e.g. a21-black-1.webp) */
 const IMG_SUFFIX: Record<string, string> = { a21: '-1' };
+/** Map specific product finish combinations to custom filenames (without directory or extension) */
+const COLOR_IMG_OVERRIDE: Record<string, string> = {
+  'gm6s-black': 'gm6s-black1',
+};
+export const colorImg = (id: string, finish: Finish) => {
+  const custom = COLOR_IMG_OVERRIDE[`${id}-${finish}`];
+  return `/assets/products/colors/${custom ?? `${id}-${finish}${IMG_SUFFIX[id] ?? ''}`}.webp`;
+};
 /** The finish a product opens on: locks show silver, or another finish than black when there is no silver */
 export function defaultFinish(p: Pick<Product, 'id' | 'kind' | 'sw'>): Finish | null {
   const own = (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f));

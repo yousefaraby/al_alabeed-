@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Metadata } from 'next';
-import { COLOR_IMGS, M, SW, USES, USE_LABEL, catalog, photoAlt, type Finish, type Product } from './catalog';
+import { COLOR_IMGS, M, SW, USES, USE_LABEL, catalog, colorImg, photoAlt, type Finish, type Product } from './catalog';
 import { href, type Lang } from './i18n';
 
 /**
@@ -107,7 +107,7 @@ export function productImages(p: Product, lang: Lang): ProductImage[] {
   add(`/assets/products/${p.img}.jpg`, photoAlt(p, lang));
   add(`/assets/products/${p.img}.webp`, photoAlt(p, lang));
   (EXTRA[p.id] || []).forEach((u) => add(u, photoAlt(p, lang)));
-  (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f)).forEach((f) => add(`/assets/products/colors/${p.id}-${f}.webp`, photoAlt(p, lang, f), f));
+  (COLOR_IMGS[p.id] || []).filter((f) => p.sw.includes(f)).forEach((f) => add(colorImg(p.id, f), photoAlt(p, lang, f), f));
   return list;
 }
 
