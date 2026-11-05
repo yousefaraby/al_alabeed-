@@ -40,7 +40,7 @@ jobs:
           server-dir: ./
           timeout: 600000
           concurrency: 2
-          dangerous-clean-slate: false
+          clean-slate: false
           exclude: |
             **/.htaccess
             **/.ftpquota
