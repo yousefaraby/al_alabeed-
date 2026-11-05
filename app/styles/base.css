@@ -1132,10 +1132,6 @@ body.is-locked { overflow: hidden; }
   .cta__btns .btn { flex: 1; }
   .faq__btns .btn { flex: 1; }
 }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-  [data-reveal] { opacity: 1 !important; transform: none !important; }
-}
 
 /* ================= product photo: full-screen viewer (components/product/PhotoViewer.tsx) ================= */
 .pdp__stage img[data-pdp-img] { cursor: zoom-in; }

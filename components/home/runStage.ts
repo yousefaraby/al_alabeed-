@@ -4,7 +4,7 @@ import { play, type PlayOptions, type Played } from '@/lib/motion';
 type Spring = { x: number; v: number; t: number; k: number; c: number };
 
 export function runStage(root: HTMLDivElement) {
-  const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const REDUCED = false;
   const AUTO_MS = 3600;
   const q = <T extends Element = SVGElement>(s: string, el: ParentNode = root) => el.querySelector<T>(s)!;
   const qa = <T extends Element = SVGElement>(s: string, el: ParentNode = root) => [...el.querySelectorAll<T>(s)];

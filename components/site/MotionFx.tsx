@@ -34,7 +34,7 @@ export default function MotionFx() {
   const path = usePathname();
 
   useEffect(() => {
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = false;
     const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
     const cleanups: VoidFunction[] = [];
 

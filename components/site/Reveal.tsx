@@ -11,7 +11,7 @@ export default function Reveal() {
   useEffect(() => {
     const seen = new WeakSet<Element>();
     const stops: VoidFunction[] = [];
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = false;
     const watch = (el: HTMLElement) => {
       if (seen.has(el) || el.classList.contains('is-in')) return;
       seen.add(el);
