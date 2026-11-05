@@ -129,7 +129,7 @@ export function pageMetadata({ lang, path, title, description, keywords = [], im
   const kw = [...new Set([...keywords, ...(PAGE_KEYWORDS[path]?.[lang] ?? []), ...SITE_KEYWORDS[lang]])];
   const shareTitle = title ? `${title} | ${BRAND[lang]}` : DEFAULTS[lang].title;
   const shareDesc = description ?? DEFAULTS[lang].description;
-  const og = (images ?? [{ url: '/assets/hero-lock.jpg', alt: BRAND[lang] }]).map((i) => ({ url: i.url, alt: i.alt }));
+  const og = (images ?? [{ url: '/assets/og-image.png', alt: BRAND[lang] }]).map((i) => ({ url: i.url, alt: i.alt }));
   return {
     ...(title ? { title } : {}),
     ...(description ? { description } : {}),

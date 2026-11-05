@@ -22,9 +22,9 @@ const KEYS: Key[] = ['hotels', 'cruises'];
 
 /** Arabic shows the Arabic name over the English one; English shows the name over its city */
 function names(lang: Lang, key: Key, ar: string, en: string): [string, string] {
-  if (lang === 'ar') return [ar, key === 'cruises' ? `${en} · Nile Cruise` : en];
-  const [nm, place] = en.split(', ');
-  return key === 'cruises' ? [en, 'Nile Cruise'] : [nm, place || 'Egypt'];
+  if (lang === 'ar') return [ar, key === 'cruises' ? `${en} · Nile Cruise` : en.split(', ')[0]];
+  const [nm, ...place] = en.split(', ');
+  return key === 'cruises' ? [en, 'Nile Cruise'] : [nm, place.join(', ') || 'Egypt'];
 }
 
 /* spotlight hover follows the pointer */

@@ -120,7 +120,7 @@ const RAW: RawProduct[] = [
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'k81', img: 'k81', model: 'K81', sw: ['black', 'silver', 'gold'] },
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'e61', img: 'e61', model: 'E61', sw: ['black', 'silver', 'gold'] },
   { ...RFID, m: [...RFID.m], uses: [...RFID.uses], id: 'e51', img: 'e51', model: 'E51', sw: ['black', 'silver', 'gold'] },
-  { id: 'dc', img: 'data-collector', kind: 'acc', type: 'acc', badge: CARD_PROGRAMMER, name: { ar: 'جهاز جمع البيانات (Data Collector)', en: 'Data Collector' }, desc: { ar: 'واجهة سهلة مبنية على نظام تشغيل للموبايل', en: 'Easy interface built on a mobile operating system' }, m: [], sw: [], uses: ['hotel'] },
+  { id: 'dc', img: 'data-collector', kind: 'acc', type: 'acc', badge: CARD_PROGRAMMER, name: { ar: 'Portable LCD Handset', en: 'Portable LCD Handset' }, desc: { ar: 'واجهة سهلة مبنية على نظام تشغيل للموبايل', en: 'Easy interface built on a mobile operating system' }, m: [], sw: [], uses: ['hotel'] },
   { id: 'enc', img: 'rfid-encoder', kind: 'acc', type: 'acc', badge: CARD_PROGRAMMER, name: { ar: 'جهاز برمجة الكروت RFID', en: 'RFID Card Encoder' }, desc: { ar: 'يبرمج كروت الأقفال للنزلاء والموظفين بتوصيله بالكمبيوتر', en: 'Programs lock cards for guests and staff via a PC connection' }, m: [], sw: [], uses: ['hotel'] },
   { id: 'gm6s', img: 'gm6s-pro', kind: 'lock', type: 'auto', model: 'GM6S Pro', m: ['face', 'finger', 'pin', 'card', 'key'], sw: ['black', 'copper'], uses: ['home', 'apartment'] },
   { id: 'e68', img: 'e68', kind: 'lock', type: 'fppin', model: 'E68', m: ['finger', 'pin', 'card', 'key'], sw: ['black', 'silver', 'gold'], uses: ['home', 'apartment'] },
@@ -246,15 +246,15 @@ export const norm = (s: string) =>
 
 export const PARTNERS: Record<'hotels' | 'cruises', [string, string][]> = {
   hotels: [
-    ['فندق حور محب - الهرم', 'Hor Moheb Hotel, Pyramids'], ['فندق مارشال - القاهرة', 'Marshal Hotel, Cairo'], ['فندق ترانزيت مطار القاهرة', 'Cairo Airport Transit Hotel'],
-    ['أجنحة فندق جولدن فايف - الغردقة', 'Golden Five Hotel Suites, Hurghada'], ['فندق ريجينا - الغردقة', 'Regina Hotel, Hurghada'], ['فندق بارسيلو - شرم الشيخ', 'Barceló Hotel, Sharm El Sheikh'],
-    ['فندق جولدن بيتش', 'Golden Beach Hotel'], ['فندق الشرطة - بورسعيد', 'Port Said Police Hotel'], ['فندق سفير - دهب', 'Safir Dahab Resort'],
-    ['فندق ريو بلازا - الغردقة', 'Riu Plaza Hotel, Hurghada'], ['قرية مرسى شقرة - مرسى علم', 'Marsa Shagra Village, Marsa Alam'], ['فندق الأيوبي - القاهرة', 'Al Ayoubi Hotel, Cairo'],
+    ['فندق حور محب - الهرم، الجيزة', 'Hor Moheb Hotel, Pyramids, Giza'], ['فندق مار شربل - القاهرة', 'Mar Charbel Hotel, Cairo'], ['فندق ترانزيت مطار القاهرة', 'Cairo Airport Transit Hotel, Cairo Airport'],
+    ['أجنحة جولدن فايف - الغردقة', 'Golden Five Hotel Suites, Hurghada'], ['فندق ريجينا - الغردقة', 'Regina Hotel, Hurghada'], ['بارسيلو شرم - شرم الشيخ', 'Barceló Sharm, Sharm El Sheikh'],
+    ['فندق جولدن بيتش', 'Golden Beach Hotel'], ['فندق الشرطة - بورسعيد', 'Port Said Police Hotel, Port Said'], ['فندق سفير دهب - دهب، جنوب سيناء', 'Safir Dahab Resort, Dahab, South Sinai'],
+    ['ريو بلازا - الغردقة', 'Rio Plaza Hotel, Hurghada'], ['قرية الشجرة - مرسى علم', 'Shagra Village, Marsa Alam'], ['فندق الأيوبي - القاهرة', 'Al Ayoubi Hotel, Cairo'],
   ],
   cruises: [
-    ['بلو شادو 2', 'Blue Shadow 2'], ['بلو شادو 3', 'Blue Shadow 3'], ['بلو شادو 4', 'Blue Shadow 4'], ['كليوباترا', 'Cleopatra'], ['ليبرتي', 'Liberty'], ['رويال بوريفاج', 'Royal Beau Rivage'],
-    ['نايل فيو', 'Nile View'], ['رويال إيليت', 'Royal Elite'], ['تاج النيل 1', 'Taj El Nil 1'], ['نيفتيس', 'Nephthys'], ['ستيفاني', 'Stephany'], ['أمادا', 'Amada'],
-    ['تي', 'T'], ['نايل ستايل', 'Nile Style'], ['لو بريمير', 'Le Premier'], ['النبيلتان', 'Al Nabilatain'], ['الملكة شيبا', 'Queen Sheba'], ['ملك طيبة', 'King of Thebes'],
-    ['مركب رع', 'Ra'], ['سارة 2', 'Sarah 2'], ['أمباسادور', 'Ambassador'], ['البصيلي', 'El Bouseily'], ['نايل جويل', 'Nile Jewel'],
+    ['بلو شادو 2', 'Blue Shadow II'], ['بلو شادو 3', 'Blue Shadow III'], ['بلو شادو 4', 'Blue Shadow IV'], ['كليوباترا', 'Cleopatra'], ['رويال ليبرتي', 'Royal Liberty'], ['رويال بوريفاج', 'Royal Beau Rivage'],
+    ['نايل فيو', 'Nile View'], ['رويال إيليت', 'Royal Elite'], ['تاج النيل', 'Tag El Nil'], ['نيفتيس', 'MS Nephtis'], ['ستيفاني', 'MS Stephanie'], ['أمادا', 'Amada'],
+    ['تي', 'T'], ['نايل ستايل', 'Nile Style'], ['لو بريمير', 'Le Premier'], ['النبيلتان', 'Al Nabilatan'], ['الملكة شيبا', 'Queen of Sheba'], ['ملك طيبة', 'King of Thebes'],
+    ['رع 2', 'Ra II'], ['برنسيس سارة 2', 'Princess Sarah II'], ['أمباسادور', 'Ambassador'], ['كازا سول', 'Casa Sol'], ['نايل جويل', 'MS Nile Jewel'],
   ],
 };

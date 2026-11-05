@@ -10,6 +10,8 @@ body { letter-spacing: 0; }
 .hero__bg::before { -webkit-mask-image: linear-gradient(270deg, transparent 0%, transparent 38%, #000 70%, #000 100%); mask-image: linear-gradient(270deg, transparent 0%, transparent 38%, #000 70%, #000 100%); }
 .hero__bg::after { left: auto; right: -7%; }
 .ul-method::after { transform-origin: left; }
+.hero__frame { transform: scaleX(-1); }
+.ul-door { clip-path: polygon(7% 0, 100% 0, 100% 100%, 0 100%); }
 .tabs__pill { right: auto; left: 5px; }
 .tabs[data-active="1"] .tabs__pill { transform: translateX(100%); }
 .partner__sub { text-align: left; }

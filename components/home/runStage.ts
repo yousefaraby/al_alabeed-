@@ -22,7 +22,7 @@ export function runStage(root: HTMLDivElement) {
 
   /* springs */
   const spring = (v: number, k = 190, c = 21): Spring => ({ x: v, v: 0, t: v, k, c });
-  const CX = 720, CY = 400; // centre of the photo viewBox
+  const CX = 710, CY = 420; // centre of the photo viewBox
   const S = { x: spring(747.5), y: spring(209), r: spring(36, 150, 17), camX: spring(0, 60, 15), camY: spring(0, 60, 15), lock: spring(0, 120, 16) };
   let settled = 0, armed = false, raf = 0, last = 0;
 
@@ -65,10 +65,12 @@ export function runStage(root: HTMLDivElement) {
   const later = (fn: () => void, ms: number) => timers.push(setTimeout(fn, ms));
   function clearFx() {
     running.forEach((a) => a.cancel()); running = []; timers.forEach(clearTimeout); timers = [];
-    qa<SVGGElement>('.ul-fx').forEach((g) => (g.style.opacity = '0'));
+    // the switch off is by class, so a late write from a stopped animation can't leave an effect on screen
+    qa<SVGGElement>('.ul-fx').forEach((g) => { g.classList.remove('is-on'); g.style.opacity = '0'; });
+    E.ok.classList.remove('is-on'); E.wave.classList.remove('is-on');
   }
   const fxEls = (name: string, o: string) => qa(`[data-fx="${name}"] [data-o="${o}"]`);
-  const show = (name: string) => anim(q(`[data-fx="${name}"]`), [{ opacity: 0 }, { opacity: 1 }], { duration: 160 });
+  const show = (name: string) => { const g = q(`[data-fx="${name}"]`); g.classList.add('is-on'); return anim(g, [{ opacity: 0 }, { opacity: 1 }], { duration: 160 }); };
   const hide = (name: string, delay: number) => anim(q(`[data-fx="${name}"]`), [{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay, easing: IN, fill: 'forwards' });
   const draw = (el: Element, delay = 0, duration = 520) => anim(el, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration, delay, easing: SNAP });
 
@@ -115,6 +117,7 @@ export function runStage(root: HTMLDivElement) {
 
   function unlockBeat() {
     // the lock's own green LED strip confirms the unlock
+    E.ok.classList.add('is-on');
     anim(E.ok, [{ opacity: 0, transform: 'scale(.7)' }, { opacity: 1, transform: 'scale(1)', offset: .25 }, { opacity: .85, transform: 'scale(1)', offset: .6 }, { opacity: 0, transform: 'scale(1.05)' }], { duration: 1100, easing: 'ease-out' });
     S.lock.t = 0;
   }
@@ -125,6 +128,7 @@ export function runStage(root: HTMLDivElement) {
     const r = S.r.t;
     E.wave.setAttribute('cx', String(S.x.t)); E.wave.setAttribute('cy', String(S.y.t));
     E.wave.setAttribute('rx', String(r)); E.wave.setAttribute('ry', String(r));
+    E.wave.classList.add('is-on');
     anim(E.wave, [{ transform: 'scale(1)', opacity: .8 }, { transform: `scale(${(r + 34) / r})`, opacity: 0 }], { duration: 750, easing: EXPO, fill: 'none' });
     const beat = FX[current!.dataset.method!]?.() ?? 600;
     later(unlockBeat, beat);
