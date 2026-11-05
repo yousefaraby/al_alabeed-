@@ -40,6 +40,7 @@ jobs:
           server-dir: ./
           timeout: 600000
           concurrency: 2
+          state-name: .ftp-deploy-state-v2.json
           exclude: |
             **/.htaccess
             **/.ftpquota
