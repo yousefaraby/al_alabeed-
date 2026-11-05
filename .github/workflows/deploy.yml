@@ -35,6 +35,7 @@ jobs:
           server-dir: ./
           timeout: 600000
           concurrency: 2
+          clean-slate: true
           state-name: ''
           exclude: |
             **/.htaccess
