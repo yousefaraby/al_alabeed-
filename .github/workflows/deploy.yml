@@ -40,7 +40,7 @@ jobs:
           server-dir: ./public_html/
           timeout: 600000
           concurrency: 1
-          protocol: ftp
+          protocol: ftps
           state-name: .ftp-deploy-state-v2.json
           exclude: |
             **/.htaccess
